@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 
 @Entity("itens")
-export class Pecas extends BaseEntity {
+export class Itens extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +20,7 @@ export class Pecas extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
-  @Column({ length: 255 })
+  @Column({ })
   quantidade: number;
 
   @Column({ length: 255 })

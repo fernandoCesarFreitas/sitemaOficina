@@ -11,8 +11,8 @@ export class Financeiro extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
-  data: Date;
+  @Column({ type: "timestamp", default: "now()" })
+  data: string;
 
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
