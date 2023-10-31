@@ -1,39 +1,32 @@
-// import { Router, Request, Response, NextFunction } from "express";
-// import { UsuarioController } from "../controller/UsuarioController";
-// import { Usuario } from "../models/Usuario";
-// import * as yup from "yup";
-// import { Not } from "typeorm";
-// import { PaginasController } from "../controller/PaginasController";
-// import { Paginas } from "../models/Paginas";
-// let paginasController: PaginasController = new PaginasController();
+import { Router, Request, Response, NextFunction } from "express";
+import { BicicletaController } from "../controller/BicicletasController";
+import { Bicicleta } from "../models/Bicicletas";
 
-// async function validar(
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ): Promise<Response | void> {
-//     let id = Number(req.params.id);
-  
-//     let pagina: Paginas | null = await Paginas.findOneBy({ id });
-  
-//     if (!pagina) {
-//       return res.status(422).json({ error: "Página não encontrada" });
-//     }
-//     res.locals.pagina = pagina;
-  
-//     return next();
-//   }
+let controller: BicicletaController = new BicicletaController();
 
-// let rotas :Router = Router();
+async function validar(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    let id = Number(req.params.id);
 
-// rotas.get("/paginas", paginasController.list);
+    let bicicleta: Bicicleta | null = await Bicicleta.findOneBy({ id });
 
-// rotas.get("/paginas/:id",validar, paginasController.find);
+    if (!bicicleta) {
+        return res.status(422).json({ error: "Bicicleta não encontrada" });
+    }
+    res.locals.bicicleta = bicicleta;
 
-// rotas.post("/paginas", paginasController.create);
+    return next();
+}
 
-// rotas.put("/paginas/:id",validar, paginasController.update);
+let rotas: Router = Router();
 
-// rotas.delete("/paginas/:id",validar, paginasController.delete);
+rotas.get("/bicicletas", controller.list);
 
-// export default rotas;
+rotas.get("/bicicletas/:id", validar, controller.find);
+
+rotas.post("/bicicletas", controller.create);
+
+rotas.put("/bicicletas/:id", validar, controller.update);
+
+rotas.delete("/bicicletas/:id", validar, controller.delete);
+
+export default rotas;

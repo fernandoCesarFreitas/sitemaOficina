@@ -4,6 +4,7 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Servicos } from "./Servicos";
 
@@ -33,6 +34,6 @@ export class Itens extends BaseEntity {
   @Column({ length: 255 })
   observacoes: string;
 
-  @ManyToOne(() => Servicos, servico => servico.itensUtilizados)
-  servico: Servicos;
+  @OneToMany(() => Servicos, servico => servico.itensUtilizados)
+  servico: Servicos[];
 }

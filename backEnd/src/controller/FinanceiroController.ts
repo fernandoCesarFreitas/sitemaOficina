@@ -58,11 +58,16 @@ export class FinanceiroController {
             return res.status(400).json({ mensagem: "Ordem do financeiro não encontrado" })
         }
 
-        let status = "Inátivo";
+        let status = "Inativo";
 
         financeiro.status = status;
         await financeiro.save();
 
+        return res.status(200).json(financeiro);
+    }
+
+    async find(req: Request, res: Response): Promise<Response> {
+        let financeiro: Financeiro = res.locals.financeiro;
         return res.status(200).json(financeiro);
     }
 }

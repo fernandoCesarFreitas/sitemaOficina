@@ -1,39 +1,32 @@
-// import { PermissoesController } from './../controller/Permissoes';
-// import { Router, Request, Response, NextFunction } from "express";
-// import { UsuarioController } from "../controller/UsuarioController";
-// import { Usuario } from "../models/Usuario";
-// import * as yup from "yup";
-// import { Not } from "typeorm";
-// import { Permissoes } from "../models/Permissoes";
-// let permissoesController: PermissoesController = new PermissoesController();
+import { ClientesController } from './../controller/ClientesController';
+import { Router, Request, Response, NextFunction } from "express";
+import { Clientes } from "../models/Clientes";
 
-// async function validar(
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ): Promise<Response | void> {
-//     let id = Number(req.params.id);
-  
-//     let permissoes: Permissoes | null = await Permissoes.findOneBy({ id });
-  
-//     if (!permissoes) {
-//       return res.status(422).json({ error: "Permissao não encontrada" });
-//     }
-//     res.locals.permissoes = permissoes;
-  
-//     return next();
-//   }
+let controller: ClientesController = new ClientesController();
 
-// let rotas :Router = Router();
+async function validar(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    let id = Number(req.params.id);
 
-// rotas.get("/permissoes:id", permissoesController.list);
+    let clientes: Clientes | null = await Clientes.findOneBy({ id });
 
-// rotas.get("/permissoes/:id",validar, permissoesController.find);
+    if (!clientes) {
+        return res.status(422).json({ error: "Cliente não encontrado" });
+    }
+    res.locals.clientes = clientes;
 
-// rotas.post("/permissoes", permissoesController.create);
+    return next();
+}
 
-// rotas.put("/permissoes/:id",validar, permissoesController.update);
+let rotas: Router = Router();
 
-// rotas.delete("/permissoes/:id",validar, permissoesController.delete);
+rotas.get("/clientes:id", controller.list);
 
-// export default rotas;
+rotas.get("/clientes/:id", validar, controller.find);
+
+rotas.post("/clientes", controller.create);
+
+rotas.put("/clientes/:id", validar, controller.update);
+
+rotas.delete("/clientes/:id", validar, controller.delete);
+
+export default rotas;

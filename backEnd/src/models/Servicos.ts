@@ -45,6 +45,6 @@ export class Servicos extends BaseEntity {
   @ManyToOne(() => Financeiro, financeiro => financeiro.servicosRealizados)
   financeiro: Financeiro;
 
-  @OneToMany(() => Itens, item => item.servico)
-  itensUtilizados: Itens[];
+  @ManyToOne(() => Itens, item => item.servico)
+  itensUtilizados: Itens;
 }

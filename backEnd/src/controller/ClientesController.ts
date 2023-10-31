@@ -25,7 +25,7 @@ export class ClientesController {
 
         return res.status(200).json(cliente);
     }
-    
+
     async list(req: Request, res: Response): Promise<Response> {
         let clientes: Clientes[] = await Clientes.find();
 
@@ -70,9 +70,14 @@ export class ClientesController {
             return res.status(400).json({ mensagem: "Cliente não encontrado" })
         }
 
-        cliente.status = "Inátivo";
+        cliente.status = "Inativo";
         await cliente.save();
 
         return res.status(200);
+    }
+
+    async find(req: Request, res: Response): Promise<Response> {
+        let clientes: Clientes = res.locals.clientes;
+        return res.status(200).json(clientes);
     }
 }

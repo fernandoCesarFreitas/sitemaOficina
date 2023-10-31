@@ -51,4 +51,9 @@ export class TipoServicoController {
 
         return res.status(200).json(tipoServico);
     }
+
+    async find(req: Request, res: Response): Promise<Response> {
+        let tipoServico: TipoServico = res.locals.tipoServico;
+        return res.status(200).json(tipoServico);
+    }
 }

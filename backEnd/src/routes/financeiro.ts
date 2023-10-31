@@ -1,17 +1,32 @@
-// import { Router } from "express";
-// import { ProdutosController } from "../controller/ProdutosController";
-// let produtosController: ProdutosController = new ProdutosController();
+import { NextFunction, Response, Request, Router } from "express";
+import { FinanceiroController } from "../controller/FinanceiroController";
+import { Financeiro } from "../models/Financeiro";
 
-// let rotas :Router = Router();
+let controller: FinanceiroController = new FinanceiroController();
 
-// rotas.get("/produtos", produtosController.list);
+async function validar(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    let id = Number(req.params.id);
 
-// rotas.get("/produtos/:id", produtosController.find);
+    let financeiro: Financeiro | null = await Financeiro.findOneBy({ id });
 
-// rotas.post("/produtos", produtosController.create);
+    if (!financeiro) {
+        return res.status(422).json({ error: "Cliente não encontrado" });
+    }
+    res.locals.financeiro = financeiro;
 
-// rotas.put("/produtos/:id", produtosController.update);
+    return next();
+}
 
-// rotas.delete("/produtos/id", produtosController.delete);
+let rotas: Router = Router();
 
-// export default rotas;
+rotas.get("/financeiro", controller.list);
+
+rotas.get("/financeiro/:id", validar, controller.find);
+
+rotas.post("/financeiro", controller.create);
+
+rotas.put("/financeiro/:id", validar, controller.update);
+
+rotas.delete("/financeiro/id", validar, controller.delete);
+
+export default rotas;

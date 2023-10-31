@@ -58,9 +58,14 @@ export class BicicletaController {
             return res.status(400).json({ mensagem: "Bicicleta não encontrada" });
         }
 
-        bicicleta.status = 'Inátivo';
+        bicicleta.status = 'Inativo';
         await bicicleta.save();
 
+        return res.status(200).json(bicicleta);
+    }
+
+    async find(req: Request, res: Response): Promise<Response> {
+        let bicicleta: Bicicleta = res.locals.bicicleta;
         return res.status(200).json(bicicleta);
     }
 }
