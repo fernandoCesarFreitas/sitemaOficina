@@ -1,49 +1,68 @@
-// import { Paginas } from "../models/Paginas";
-// import { Request, Response } from "express";
-// import { ILike } from "typeorm";
-// import bcrypt from "bcrypt";
-// export class PaginasController {
-//   async list(req: Request, res: Response): Promise<Response> {
-//     let nome = req.query.nome;
+import { Request, Response } from "express";
+import { Financeiro } from "../models/Financeiro";
 
-//     let paginas: Paginas[] = await Paginas.findBy({
-//       nome: nome ? ILike(`%${nome}%`) : undefined,
-//     }); //aqui na lista nao usamos as {}
-//     return res.status(200).json(paginas);
-//   }
+export class FinanceiroController {
+    async create(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//   async create(req: Request, res: Response): Promise<Response> {
-//     let body = req.body; //pega o que vem da tela
-//     let paginas: Paginas = await Paginas.create({
-//       nome: body.nome,
-//     }).save(); 
+        let data = body.data;
+        let valor = body.valor;
+        let metodoDePagamento = body.metodoDePagamento;
+        let status = "Ativo";
 
-//     return res.status(200).json(paginas); //retorna o usuario criado e o status que deu certo
-//   }
+        let financeiro: Financeiro = await Financeiro.create({
+            status,
+            data,
+            valor,
+            metodoDePagamento,
+        }).save();
 
-//   async update(req: Request, res: Response): Promise<Response> {
-//     let body = req.body;
+        return res.status(200).json(financeiro);
+    }
 
-//     let paginas: Paginas = res.locals.paginas;
-//     paginas.nome = body.nome;
+    async list(req: Request, res: Response): Promise<Response> {
+        let financeiros: Financeiro[] = await Financeiro.find();
 
-//     await paginas.save();
+        return res.status(200).json(financeiros);
+    }
 
-//     return res.status(200).json(paginas);
-//   }
+    async update(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//   async delete(req: Request, res: Response): Promise<Response> {
-//     let body = req.body;
-//     console.log(body.id);
-//     console.log(res.locals.pagina);
-//     let pagina: Paginas = res.locals.pagina;
-//     console.log(pagina);
-//     pagina.remove();
-//     return res.status(200).json();
-//   }
+        let financeiro: Financeiro | null = await Financeiro.findOneBy({ id: body.id });
 
-//   async find(req: Request, res: Response): Promise<Response> {
-//     let paginas: Paginas = res.locals.paginas;
-//     return res.status(200).json(paginas);
-//   }
-// }
+        if (!financeiro) {
+            return res.status(400).json({ mensagem: "Ordem do financeiro não encontrado" })
+        }
+
+        let data = body.data;
+        let valor = body.valor;
+        let metodoDePagamento = body.metodoDePagamento;
+        let status = "Ativo";
+
+        financeiro.data = data;
+        financeiro.valor = valor;
+        financeiro.metodoDePagamento = metodoDePagamento;
+        financeiro.status = status;
+        await financeiro.save();
+
+        return res.status(200).json(financeiro);
+    }
+
+    async delete(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
+
+        let financeiro: Financeiro | null = await Financeiro.findOneBy({ id: body.id });
+
+        if (!financeiro) {
+            return res.status(400).json({ mensagem: "Ordem do financeiro não encontrado" })
+        }
+
+        let status = "Inátivo";
+
+        financeiro.status = status;
+        await financeiro.save();
+
+        return res.status(200).json(financeiro);
+    }
+}

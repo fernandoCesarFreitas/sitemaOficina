@@ -1,16 +1,19 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    BaseEntity,
-    OneToMany,
-  } from "typeorm";
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+} from "typeorm";
 import { Servicos } from "./Servicos";
 
 @Entity("financeiro")
 export class Financeiro extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  status: string;
 
   @Column({ type: "timestamp", default: "now()" })
   data: string;

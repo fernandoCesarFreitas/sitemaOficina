@@ -1,51 +1,78 @@
-// import { Permissoes } from "../models/Permissoes";
-// import { Request, Response } from "express";
-// import { ILike } from "typeorm";
-// import bcrypt from "bcrypt";
-// export class PermissoesController {
+import { Request, Response } from "express";
+import { Clientes } from "../models/Clientes";
 
-//   async list(req: Request, res: Response): Promise<Response> {
+export class ClientesController {
+    async create(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
+
+        let nome = body.nome;
+        let email = body.email;
+        let telefone = body.telefone;
+        let cpf = body.cpf;
+        let endereco = body.endereco;
+        let cidade = body.cidade;
+        let status = "Ativo";
+
+        let cliente: Clientes = await Clientes.create({
+            nome,
+            email,
+            telefone,
+            cpf,
+            endereco,
+            cidade,
+            status,
+        }).save()
+
+        return res.status(200).json(cliente);
+    }
     
-//     let id_usuario:number = Number(req.query.id_usuario);
-//     console.log(id_usuario);
-//     let permissoes: Permissoes[] = await Permissoes.findBy({
-//     usuario: id_usuario ? {id:id_usuario} : undefined,//para filtrar por usuario
-//     }); //aqui na lista nao usamos as {}
-//     return res.status(200).json(permissoes);
-//   }
+    async list(req: Request, res: Response): Promise<Response> {
+        let clientes: Clientes[] = await Clientes.find();
 
-//   async create(req: Request, res: Response): Promise<Response> {
-//     let body = req.body; //pega o que vem da tela
-//     let permissoes: Permissoes = await Permissoes.create({
-//         tipo: body.tipo,
-//         id_usuario: body. id_usuario,
-//         id_pagina: body.id_pagina,
-//     }).save(); 
+        return res.status(200).json(clientes);
+    }
 
-//     return res.status(200).json(permissoes); //retorna o usuario criado e o status que deu certo
-//   }
+    async update(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//   async update(req: Request, res: Response): Promise<Response> {
-//     let body = req.body;
+        let cliente: Clientes | null = await Clientes.findOneBy({ id: body.id })
 
-//     let permissoes: Permissoes = res.locals.permissoes;
-//     permissoes.tipo = body.nome;
-//     permissoes.id_usuario = body.id_usuario;
-//     permissoes.id_pagina = body.id_pagina;
-//     await permissoes.save();
+        if (!cliente) {
+            return res.status(400).json({ mensagem: "Cliente não encontrado" })
+        }
 
-//     return res.status(200).json(permissoes);
-//   }
+        let nome = body.nome;
+        let email = body.email;
+        let telefone = body.telefone;
+        let cpf = body.cpf;
+        let endereco = body.endereco;
+        let cidade = body.cidade;
+        let status = "Ativo";
 
-//   async delete(req: Request, res: Response): Promise<Response> {
-//     let body = req.body;
-//     let permissoes: Permissoes = res.locals.permissoes;
-//     permissoes.remove();
-//     return res.status(200).json();
-//   }
+        cliente.nome = nome;
+        cliente.email = email;
+        cliente.cpf = cpf;
+        cliente.telefone = telefone;
+        cliente.endereco = endereco;
+        cliente.cidade = cidade;
+        cliente.status = status;
+        await cliente.save();
 
-//   async find(req: Request, res: Response): Promise<Response> {
-//     let permissoes: Permissoes = res.locals.permissoes;
-//     return res.status(200).json(permissoes);
-//   }
-// }
+        return res.status(200);
+    }
+
+    async delete(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
+
+        let cliente: Clientes | null = await Clientes.findOneBy({ id: body.id })
+
+        if (!cliente) {
+            return res.status(400).json({ mensagem: "Cliente não encontrado" })
+        }
+
+        cliente.status = "Inátivo";
+        await cliente.save();
+
+        return res.status(200);
+    }
+}

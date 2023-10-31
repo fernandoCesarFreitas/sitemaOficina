@@ -12,6 +12,9 @@ export class TipoServico extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  status: string;
+
   @Column({ length: 255 })
   descricao: string;
 

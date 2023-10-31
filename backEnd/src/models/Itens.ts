@@ -12,6 +12,9 @@ export class Itens extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  status: string;
+
   @Column({ length: 255 })
   nome: string;
 

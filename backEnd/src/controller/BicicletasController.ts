@@ -1,68 +1,66 @@
-// import { Produtos } from "../models/Produtos";
-// import { Request, Response } from "express";
+import { Request, Response } from "express";
+import { Bicicleta } from "../models/Bicicletas";
 
-// export class ProdutosController{
+export class BicicletaController {
+    async create(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//     async list (req: Request, res: Response):Promise<Response>{
-//        let produtos: Produtos[] = await Produtos.find()
-//         return res.status(200).json({produtos})
-//     }
+        let modelo = body.modelo;
+        let tipo = body.tipo;
+        let cor = body.cor;
+        let status = 'Ativo';
 
-//     async create(req: Request, res: Response):Promise<Response>{
-//         let body = req.body;
+        let bicicleta: Bicicleta = await Bicicleta.create({
+            modelo,
+            tipo,
+            cor,
+            status,
+        }).save()
 
-//         let produto: Produtos =  await Produtos.create({
-//             nome:body.nome,
-//             descricao:body.descricao,
-//             preco:body.preco,
-//             tipo:body.tipo,
-//         }).save();
-//         return res.status(200).json(produto);
-//     }
+        return res.status(200).json(bicicleta);
+    }
 
-//     async update(req: Request, res: Response):Promise<Response>{
-//         let body =  req.body;
+    async list(req: Request, res: Response): Promise<Response> {
+        let bicicletas: Bicicleta[] = await Bicicleta.find();
 
-//         let id  = Number(req.params.id);
+        return res.status(200).json(bicicletas);
+    }
 
-//         let produto: Produtos| null = await Produtos.findOneBy({id});
+    async update(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//         if(!produto){
-//             return res.status(422).json({error:'Produto não encontrado'});
-//         }
+        let bicicleta: Bicicleta | null = await Bicicleta.findOneBy({ id: body.id });
 
-//         produto.nome = body.nome;
-//         produto.descricao = body.descricao;
-//         produto.preco = body.preco;
-//         produto.tipo = body.tipo;
-//         await produto.save();
-//         return res.status(200).json(produto)
-//     }
+        if (!bicicleta) {
+            return res.status(400).json({ mensagem: "Bicicleta não encontrada" });
+        }
 
-//     async delete (req: Request, res: Response): Promise<Response>{
-//         let body = req.body;
-//         let id = Number(req.params.id);
+        let modelo = body.modelo;
+        let tipo = body.tipo;
+        let cor = body.cor;
+        let status = 'Ativo';
 
-//         let produto: Produtos | null =  await Produtos.findOneBy({id});
+        bicicleta.modelo = modelo;
+        bicicleta.tipo = tipo;
+        bicicleta.cor = cor;
+        bicicleta.status = status;
+        await bicicleta.save();
 
-//         if(!produto){
-//             return res.status(422).json({error:'produto não encontrado'});
-//         }
-//         produto.remove();
-//         return res.status(200).json();
-//     }
+        return res.status(200);
+    }
 
-//     async find(req: Request, res: Response):Promise<Response>{
-//         let body = req.body;
-//         let id = Number(req.params.id);
+    async delete(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
 
-//         let produto: Produtos| null = await Produtos.findOneBy({id});
+        let bicicleta: Bicicleta | null = await Bicicleta.findOneBy({ id: body.id });
 
-//         if(!produto){
-//             return res.status(422).json({error:'produto não encontrado'});
-//         }
+        if (!bicicleta) {
+            return res.status(400).json({ mensagem: "Bicicleta não encontrada" });
+        }
 
-//         return res.status(200).json(produto)
-//     }
+        bicicleta.status = 'Inátivo';
+        await bicicleta.save();
 
-// }
+        return res.status(200).json(bicicleta);
+    }
+}
