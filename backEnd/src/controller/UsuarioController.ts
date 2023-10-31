@@ -19,6 +19,7 @@ export class UsuarioController {
       nome: body.nome,
       email: body.email,
       senha: senha,
+      status: 'Ativo',
     }).save(); //cria o usuario
 
     let { senha: s, ...usuarioSemSenha } = usuario;
@@ -43,7 +44,7 @@ export class UsuarioController {
   async delete(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let usuario: Usuario = res.locals.usuario;
-    usuario.remove();
+    usuario.status = 'Inativo';
     return res.status(200).json();
   }
 
@@ -60,12 +61,12 @@ export class UsuarioController {
     let header = '"Nome";"Email"\n';
     let csv = header;
 
-  for (let idx in users) {
-    let pessoa = users[idx];
-    csv +=
-      '"' + pessoa.nome + '";"' + pessoa.email + '"\n';
-  }
-  console.log(csv)
+    for (let idx in users) {
+      let pessoa = users[idx];
+      csv +=
+        '"' + pessoa.nome + '";"' + pessoa.email + '"\n';
+    }
+    console.log(csv)
     return res.status(200).send(csv).attachment('output.csv');
   }
 }

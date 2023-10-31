@@ -29,7 +29,7 @@ export class BicicletaController {
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let bicicleta: Bicicleta | null = await Bicicleta.findOneBy({ id: body.id });
+        let bicicleta: Bicicleta = res.locals.bicicleta;
 
         if (!bicicleta) {
             return res.status(400).json({ mensagem: "Bicicleta não encontrada" });
@@ -52,7 +52,7 @@ export class BicicletaController {
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let bicicleta: Bicicleta | null = await Bicicleta.findOneBy({ id: body.id });
+        let bicicleta: Bicicleta = res.locals.bicicleta;
 
         if (!bicicleta) {
             return res.status(400).json({ mensagem: "Bicicleta não encontrada" });

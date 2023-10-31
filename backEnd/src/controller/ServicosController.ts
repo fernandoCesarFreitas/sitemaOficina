@@ -25,7 +25,6 @@ export class ServicosController {
         let tipoServico = await TipoServico.findOneBy({ id: tipoServicoId });
         let bicicleta = await Bicicleta.findOneBy({ id: bicicletaId });
         let cliente = await Clientes.findOneBy({ id: clienteId });
-        let financeiro = await Financeiro.findOneBy({ id: financeiroId });
         let itens = await Itens.findOneBy({ id: itensUtilizadosId });
 
         if (!tipoServico) {
@@ -36,9 +35,6 @@ export class ServicosController {
         }
         if (!cliente) {
             return res.status(400).json({ mensagem: "Cliente não encontrado" })
-        }
-        if (!financeiro) {
-            return res.status(400).json({ mensagem: "Financeiro não encontrado" })
         }
         if (!itens) {
             return res.status(400).json({ mensagem: "Item não encontrado" })
@@ -53,7 +49,6 @@ export class ServicosController {
             bicicleta: bicicleta,
             tipoServico: tipoServico,
             cliente: cliente,
-            financeiro: financeiro,
             itensUtilizados: itens,
         }).save()
 
@@ -74,7 +69,7 @@ export class ServicosController {
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let servico: Servicos | null = await Servicos.findOneBy({ id: body.servicoId })
+        let servico: Servicos = res.locals.servicos;
 
         if (!servico) {
             return res.status(400).json({ mensagem: "Serviço não encontrado" })
@@ -132,7 +127,7 @@ export class ServicosController {
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let servico: Servicos | null = await Servicos.findOneBy({ id: body.servicoId })
+        let servico: Servicos = res.locals.servicos;
 
         if (!servico) {
             return res.status(400).json({ mensagem: "Serviço não encontrado" })

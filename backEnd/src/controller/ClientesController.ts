@@ -35,7 +35,7 @@ export class ClientesController {
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let cliente: Clientes | null = await Clientes.findOneBy({ id: body.id })
+        let cliente: Clientes = res.locals.clientes;
 
         if (!cliente) {
             return res.status(400).json({ mensagem: "Cliente não encontrado" })
@@ -64,7 +64,7 @@ export class ClientesController {
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let cliente: Clientes | null = await Clientes.findOneBy({ id: body.id })
+        let cliente: Clientes = res.locals.clientes;
 
         if (!cliente) {
             return res.status(400).json({ mensagem: "Cliente não encontrado" })

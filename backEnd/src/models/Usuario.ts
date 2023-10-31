@@ -12,6 +12,9 @@ export class Usuario extends BaseEntity {
   id: number;
 
   @Column({ length: 255 })
+  status: string
+
+  @Column({ length: 255 })
   nome: string;
 
   @Column({ select: false }) //nenhuma consulta ira retornar a senha

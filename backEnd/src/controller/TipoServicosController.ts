@@ -4,6 +4,7 @@ import { TipoServico } from "../models/TipoServico";
 export class TipoServicoController {
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
+        
         let descricao = body.descricao;
         let valor = body.valor
         let status = "Ativo"
@@ -25,7 +26,7 @@ export class TipoServicoController {
 
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
-        let tipoServico: TipoServico | null = await TipoServico.findOneBy({ id: body.id });
+        let tipoServico: TipoServico = res.locals.tipoServico;
 
         if (!tipoServico) {
             return res.status(200).json({ mensagem: "Tipo de serviço não encontrado" })
@@ -40,7 +41,7 @@ export class TipoServicoController {
 
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
-        let tipoServico: TipoServico | null = await TipoServico.findOneBy({ id: body.id });
+        let tipoServico: TipoServico = res.locals.tipoServico;
 
         if (!tipoServico) {
             return res.status(200).json({ mensagem: "Tipo de serviço não encontrado" })
