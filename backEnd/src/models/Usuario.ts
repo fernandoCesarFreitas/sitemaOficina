@@ -1,7 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
-import { Permissoes } from "./Permissoes";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany,
+} from "typeorm";
 
-@Entity('usuarios')
+@Entity("usuarios")
 export class Usuario extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -9,12 +14,9 @@ export class Usuario extends BaseEntity {
   @Column({ length: 255 })
   nome: string;
 
-  @Column({ select: false })//nenhuma consulta ira retornar a senha 
+  @Column({ select: false }) //nenhuma consulta ira retornar a senha
   senha: string;
 
-  @Column({ unique: true })// usuario unico
+  @Column({ unique: true }) // usuario unico
   email: string;
-
-  @OneToMany(()=> Permissoes,(permissao)=>permissao.usuario)
-  public permissoes: Permissoes[];
 }

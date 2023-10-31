@@ -1,27 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
-import { Usuario } from "./Usuario";
-import { Paginas } from "./Paginas";
+// import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from "typeorm";
+// import { Usuario } from "./Usuario";
+// import { Paginas } from "./Paginas";
 
-@Entity('permissao')
-export class Permissoes extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Entity('permissao')
+// export class Permissoes extends BaseEntity {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column({ length: 255 })
-  tipo: string;
-
- 
-  id_usuario: number;
+//   @Column({ length: 255 })
+//   tipo: string;
 
  
-  id_pagina: number;
+//   id_usuario: number;
 
-  @ManyToOne(()=> Usuario,(usuario)=>usuario.permissoes,{eager:true})
-  @JoinColumn({name:'id_usuario'})
-  public usuario: Usuario;
+ 
+//   id_pagina: number;
 
-  @ManyToOne(()=> Paginas,(pagina)=>pagina.permissoes,{eager:true})
-  @JoinColumn({name:'id_pagina'})
-  public pagina: Paginas;
+//   @ManyToOne(()=> Usuario,(usuario)=>usuario.permissoes,{eager:true})
+//   @JoinColumn({name:'id_usuario'})
+//   public usuario: Usuario;
 
-}
+//   @ManyToOne(()=> Paginas,(pagina)=>pagina.permissoes,{eager:true})
+//   @JoinColumn({name:'id_pagina'})
+//   public pagina: Paginas;
+
+// }

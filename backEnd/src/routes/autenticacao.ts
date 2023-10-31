@@ -1,4 +1,4 @@
-import { AutenticacaoController } from './../controller/AutenticacaoController';
+import { AutenticacaoController } from '../controller/AutenticacaoController';
 import { Router,} from "express";
 
 let rotas: Router = Router();
