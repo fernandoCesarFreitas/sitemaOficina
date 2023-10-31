@@ -7,6 +7,8 @@ import {
   OneToMany,
 } from "typeorm";
 
+import { Servicos } from "./Servicos";
+
 @Entity("clientes")
 export class Clientes extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -29,4 +31,7 @@ export class Clientes extends BaseEntity {
 
   @Column({ length: 255 })
   cidade: string;
+
+  @OneToMany(() => Servicos, servico => servico.cliente)
+  servicosRealizados: Servicos[];
 }

@@ -5,6 +5,7 @@ import {
     BaseEntity,
     OneToMany,
   } from "typeorm";
+import { Servicos } from "./Servicos";
 
 @Entity("financeiro")
 export class Financeiro extends BaseEntity {
@@ -19,4 +20,7 @@ export class Financeiro extends BaseEntity {
 
   @Column({ length: 255 })
   metodoDePagamento: string;
+
+  @OneToMany(() => Servicos, servico => servico.financeiro)
+  servicosRealizados: Servicos[];
 }

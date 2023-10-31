@@ -3,8 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToMany,
+  ManyToOne,
 } from "typeorm";
+import { Servicos } from "./Servicos";
 
 @Entity("itens")
 export class Itens extends BaseEntity {
@@ -20,7 +21,7 @@ export class Itens extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
-  @Column({ })
+  @Column({})
   quantidade: number;
 
   @Column({ length: 255 })
@@ -28,4 +29,7 @@ export class Itens extends BaseEntity {
 
   @Column({ length: 255 })
   observacoes: string;
+
+  @ManyToOne(() => Servicos, servico => servico.itensUtilizados)
+  servico: Servicos;
 }
