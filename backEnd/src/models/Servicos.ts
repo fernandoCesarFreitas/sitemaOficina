@@ -4,7 +4,11 @@ import {
     Column,
     BaseEntity,
     OneToMany,
+    ManyToOne,
   } from "typeorm";
+
+  import { Bicicleta } from "./Bicicletas";
+  import { TipoServico } from "./TipoServico";
 
 @Entity("servicos")
 export class Servicos extends BaseEntity {
@@ -25,4 +29,10 @@ export class Servicos extends BaseEntity {
 
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
+
+  @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados)
+  bicicleta: Bicicleta;
+
+  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos)
+  tipoServico: TipoServico;
 }

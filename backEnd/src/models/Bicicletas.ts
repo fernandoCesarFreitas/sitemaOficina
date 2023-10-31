@@ -7,6 +7,8 @@ import {
   OneToOne,
 } from "typeorm";
 
+import { Servicos } from "./Servicos";
+
 @Entity("bicicleta")
 export class Bicicleta extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -20,4 +22,7 @@ export class Bicicleta extends BaseEntity {
 
   @Column({ length: 255 })
   cor: string;
+
+  @OneToMany(() => Servicos, servico => servico.bicicleta)
+  servicosRealizados: Servicos[];
 }
