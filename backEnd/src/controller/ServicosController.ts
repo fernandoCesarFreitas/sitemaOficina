@@ -10,14 +10,12 @@ export class ServicosController {
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let dataEntrada = body.dataEntrada;
         let descricao = body.descricao;
-        let status = body.status;
+        let status = "Ativo";
         let valor = body.valor;
         let tipoServicoId = body.tipoServicoId;
         let bicicletaId = body.bicicletaId;
         let clienteId = body.clienteId;
-        let financeiroId = body.financeiroId;
         let itensUtilizadosId = body.itensUtilizadosId;
 
 
@@ -42,7 +40,6 @@ export class ServicosController {
 
 
         let servico: Servicos = await Servicos.create({
-            dataEntrada: dataEntrada,
             descricao: descricao,
             status: status,
             valor: valor,

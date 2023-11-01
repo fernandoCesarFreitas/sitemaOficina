@@ -1,20 +1,24 @@
 import { Request, Response } from "express";
 import { Financeiro } from "../models/Financeiro";
+import { Servicos } from "../models/Servicos";
 
 export class FinanceiroController {
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
-        let data = body.data;
         let valor = body.valor;
         let metodoDePagamento = body.metodoDePagamento;
         let status = "Ativo";
+        let servicos: Servicos | null = await Servicos.findOneBy({ id: body.servicoId });
 
+        if (!servicos) {
+            return res.status(400).json({ mensagem: "Serviço não encontrado" })
+        }
         let financeiro: Financeiro = await Financeiro.create({
             status,
-            data,
             valor,
             metodoDePagamento,
+            servicosRealizados: servicos
         }).save();
 
         return res.status(200).json(financeiro);

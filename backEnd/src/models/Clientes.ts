@@ -14,7 +14,7 @@ export class Clientes extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 255 })
   status: string;
 
   @Column({ length: 255 })

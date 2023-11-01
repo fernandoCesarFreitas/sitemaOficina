@@ -33,7 +33,7 @@ server.use(tiposervicoRoutes);//basicAuth,
 export default {
   start() {
     server.listen(port, () => {
-      console.log("servidor iniciado na porta 3000");
+      console.log(`servidor iniciado na porta ${port}`);
     });
   },
 };

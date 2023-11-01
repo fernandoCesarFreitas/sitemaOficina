@@ -7,13 +7,12 @@ let controller: ServicosController = new ServicosController();
 
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
-        dataEntrada: yup.date().required(),
         descricao: yup.string().min(3).max(255).required(),
         valor: yup.number().required(),
-        bicicleta: yup.number().required(),
-        tipoServico: yup.number().required(),
-        cliente: yup.number().required(),
-        itensUtilizados: yup.number().required(),
+        bicicletaId: yup.number().required(),
+        tipoServicoId: yup.number().required(),
+        clienteId: yup.number().required(),
+        itensUtilizadosId: yup.number().required(),
     });
 
     let payload = req.body;

@@ -18,7 +18,7 @@ export class Servicos extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "timestamp", default: "now()", nullable: true })
   dataEntrada: string
 
   @Column({ type: "timestamp", default: "now()", nullable: true })

@@ -10,7 +10,7 @@ async function validarPayload(req: Request, res: Response, next: NextFunction): 
         nome: yup.string().min(3).max(255).required(),
         email: yup.string().min(3).max(255).required(),
         telefone: yup.string().min(8).max(20).required(),
-        cpf: yup.string().min(11).max(14).required(),
+        cpf: yup.string().min(11).max(11).required(),
         endereco: yup.string().min(3).max(255).required(),
         cidade: yup.string().min(3).max(255).required(),
     });
@@ -44,7 +44,7 @@ async function validar(req: Request, res: Response, next: NextFunction): Promise
 
 let rotas: Router = Router();
 
-rotas.get("/clientes:id", controller.list);
+rotas.get("/clientes", controller.list);
 
 rotas.get("/clientes/:id", validar, controller.find);
 

@@ -7,7 +7,6 @@ let controller: FinanceiroController = new FinanceiroController();
 
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
-        data: yup.date().required(),
         valor: yup.number().required(),
         metodoDePagamento: yup.string().min(3).max(255).required(),
     });

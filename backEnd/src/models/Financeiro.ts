@@ -25,5 +25,5 @@ export class Financeiro extends BaseEntity {
   metodoDePagamento: string;
 
   @OneToMany(() => Servicos, servico => servico.financeiro)
-  servicosRealizados: Servicos[];
+  servicosRealizados: Servicos;
 }
