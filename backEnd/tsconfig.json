@@ -28,7 +28,7 @@
     /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     "strictPropertyInitialization": false,
     /* Check for class properties that are declared but not set in the constructor. */
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "noImplicitThis": true,
     /* Enable error reporting when 'this' is given the type 'any'. */
