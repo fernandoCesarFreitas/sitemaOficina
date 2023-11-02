@@ -33,18 +33,18 @@ export class Servicos extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
-  @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados)
+  @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados, { eager: true })
   bicicleta: Bicicleta;
 
-  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos)
+  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos, { eager: true })
   tipoServico: TipoServico;
 
-  @ManyToOne(() => Clientes, cliente => cliente.servicosRealizados)
+  @ManyToOne(() => Clientes, cliente => cliente.servicosRealizados, { eager: true })
   cliente: Clientes;
 
-  @ManyToOne(() => Financeiro, financeiro => financeiro.servicosRealizados)
+  @ManyToOne(() => Financeiro, financeiro => financeiro.servicosRealizados, { eager: true })
   financeiro: Financeiro;
 
-  @ManyToOne(() => Itens, item => item.servico)
+  @ManyToOne(() => Itens, item => item.servico, { eager: true })
   itensUtilizados: Itens;
 }

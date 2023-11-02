@@ -24,6 +24,6 @@ export class Financeiro extends BaseEntity {
   @Column({ length: 255 })
   metodoDePagamento: string;
 
-  @OneToMany(() => Servicos, servico => servico.financeiro)
+  @OneToMany(() => Servicos, servico => servico.financeiro, { eager: true })
   servicosRealizados: Servicos;
 }
