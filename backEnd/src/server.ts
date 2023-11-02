@@ -5,6 +5,7 @@ import bicicletasRoutes from './routes/bicicletas'
 import clientesRoutes from './routes/clientes'
 import financeiroRoutes from './routes/financeiro'
 import itemRoutes from './routes/itens'
+import autenticacaoRoutes from './routes/autenticacao'
 import servicoRoutes from './routes/servicos'
 import tiposervicoRoutes from './routes/tipoServicos'
 
@@ -20,7 +21,7 @@ server.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 //chama a rota de usuarios
-// server.use(autenticacaoRoutes);
+server.use(autenticacaoRoutes);
 server.use(usuariosRoutes);//basicAuth,
 server.use(bicicletasRoutes);//basicAuth,
 server.use(clientesRoutes);//basicAuth,
