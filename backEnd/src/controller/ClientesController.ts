@@ -58,7 +58,7 @@ export class ClientesController {
         cliente.status = status;
         await cliente.save();
 
-        return res.status(200);
+        return res.status(200).json(cliente);
     }
 
     async delete(req: Request, res: Response): Promise<Response> {

@@ -8,6 +8,7 @@ import itemRoutes from './routes/itens'
 import autenticacaoRoutes from './routes/autenticacao'
 import servicoRoutes from './routes/servicos'
 import tiposervicoRoutes from './routes/tipoServicos'
+import emailRoutes from './routes/email';
 
 let server: Express = express();
 let port: Number = Number(process.env.server_port || 3000);
@@ -29,6 +30,7 @@ server.use(financeiroRoutes);//basicAuth,
 server.use(itemRoutes);//basicAuth,
 server.use(servicoRoutes);//basicAuth,
 server.use(tiposervicoRoutes);//basicAuth,
+server.use(emailRoutes);//basicAuth,
 
 //iniciar servidor
 export default {

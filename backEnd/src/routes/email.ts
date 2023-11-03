@@ -1,18 +1,14 @@
-import { ClientesController } from './../controller/ClientesController';
+import { EmailController } from './../controller/EmailController';
 import { Router, Request, Response, NextFunction } from "express";
 import { Clientes } from "../models/Clientes";
 import * as yup from 'yup';
 
-let controller: ClientesController = new ClientesController();
+let controller: EmailController = new EmailController();
 
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
-        nome: yup.string().min(3).max(255).required(),
-        email: yup.string().email().min(3).max(255).required(),
-        telefone: yup.string().min(8).max(20).required(),
-        cpf: yup.string().min(11).max(11).required(),
-        endereco: yup.string().min(3).max(255).required(),
-        cidade: yup.string().min(3).max(255).required(),
+        titulo: yup.string().min(5).max(255).required(),
+        mensagem: yup.string().min(10).max(255).required(),
     });
 
     let payload = req.body;
@@ -44,14 +40,6 @@ async function validar(req: Request, res: Response, next: NextFunction): Promise
 
 let rotas: Router = Router();
 
-rotas.get("/clientes", controller.list);
-
-rotas.get("/clientes/:id", validar, controller.find);
-
-rotas.post("/clientes", validarPayload, controller.create);
-
-rotas.put("/clientes/:id", validar, validarPayload, controller.update);
-
-rotas.delete("/clientes/:id", validar, controller.delete);
+rotas.post("/email/:id", validar, validarPayload, controller.enviarEmail);
 
 export default rotas;
