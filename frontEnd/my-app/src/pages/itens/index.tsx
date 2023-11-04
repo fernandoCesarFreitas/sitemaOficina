@@ -8,13 +8,24 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { UserContainer, ContentContainer } from "./styles";
 
-export default function Users() {
-  const [userList, setUserList] = useState<User[]>();
+
+export type Item = {
+  id: number;
+  nome: string;
+  descricao: string;
+  valor: number;
+  quantidade: number;
+  maoDeObra: string;
+  observacoes: string;
+};
+
+export default function Itens() {
+  const [itemList, setItemList] = useState<Item[]>();
 
   useEffect(() => {
     axios
-      .get<User[]>("http://localhost:3000/itens")
-      .then((response) => setUserList(response.data));
+      .get<Item[]>("http://localhost:3000/itens")
+      .then((response) => setItemList(response.data));
   }, []);
 
   return (
@@ -25,12 +36,13 @@ export default function Users() {
           <Menu />
           <ContentContainer>
             <Button label="Criar Item" />
-            {userList?.map((user) => {
+            {itemList?.map((item) => {
               return (
-                <Card key={user.id}>
-                  <CardInfo title="ID" data={user.id} />
-                  <CardInfo title="Nome" data={user.nome} />
-                  <CardInfo title="E-mail" data={user.email} />
+                <Card key={item.id}>
+                  <CardInfo title="ID" data={item.id} />
+                  <CardInfo title="Nome" data={item.nome} />
+                  <CardInfo title="Descrição" data={item.descricao} />
+                  <CardInfo title="Quantidade" data={item.quantidade} />
                 </Card>
               );
             })}

@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [isDarkTheme, setDarkTheme] = useState(true); // setado que semore vai iniciar com o tema escuro
   return (
     <AuthProvider>
-      <ThemeProvider theme={ isDarkTheme ? darkTheme : defaultTheme }>{/*setamos o valor  para carregar o thema dark  senao carregar defaul*/}
+      <ThemeProvider theme={ isDarkTheme ? defaultTheme : darkTheme }>{/*setamos o valor  para carregar o thema dark  senao carregar defaul*/}
         <GlobalStyle />
         <Component {...pageProps} />
       </ThemeProvider>

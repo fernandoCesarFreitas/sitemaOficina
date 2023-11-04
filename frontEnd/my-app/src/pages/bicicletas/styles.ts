@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const UserContainer = styled.body`
-  width: 100vw;
+  width: 104vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;

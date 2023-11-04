@@ -38,5 +38,5 @@ export const NavLink = styled(Link)`
     color: ${(props) => props.theme.primary};// pegamos c o icone esta ativo ou nao
   }
   text-decoration: none;// para tirar a estilizacao padrao do link
-  color: ${(props) => props.theme.white};
+  color: ${(props) => props.theme.secondary};
 `;

@@ -8,13 +8,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { UserContainer, ContentContainer } from "./styles";
 
-export default function Users() {
-  const [userList, setUserList] = useState<User[]>();
+export type Tipo = {
+  id: number;
+  descricao: string;
+  valor: number;
+};
+
+export default function Tipo() {
+  const [tipoList, setTipoList] = useState<Tipo[]>();
+
 
   useEffect(() => {
     axios
-      .get<User[]>("http://localhost:3000/tipoServico")
-      .then((response) => setUserList(response.data));
+      .get<Tipo[]>("http://localhost:3000/tipoServico")
+      .then((response) => setTipoList(response.data));
   }, []);
 
   return (
@@ -25,12 +32,12 @@ export default function Users() {
           <Menu />
           <ContentContainer>
             <Button label="Criar Serviço" />
-            {userList?.map((user) => {
+            {tipoList?.map((tipo) => {
               return (
-                <Card key={user.id}>
-                  <CardInfo title="ID" data={user.id} />
-                  <CardInfo title="Descrição" data={user.nome} />
-                  <CardInfo title="Valor" data={user.email} />
+                <Card key={tipo.id}>
+                  <CardInfo title="ID" data={tipo.id} />
+                  <CardInfo title="Descrição" data={tipo.descricao} />
+                  <CardInfo title="Valor" data={tipo.valor} />
                 </Card>
               );
             })}
