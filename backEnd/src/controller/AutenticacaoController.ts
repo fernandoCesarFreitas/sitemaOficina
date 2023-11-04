@@ -3,6 +3,7 @@ import { Usuario } from "../models/Usuario";
 import bcrypt from "bcrypt";
 
 export class AutenticacaoController {
+  
   async login(req: Request, res: Response): Promise<Response> {
     let email: string = req.body.email;
     let senha: string = req.body.senha;

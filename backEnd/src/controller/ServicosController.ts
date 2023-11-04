@@ -6,6 +6,10 @@ import { Financeiro } from "../models/Financeiro";
 import { Servicos } from "../models/Servicos";
 import { Itens } from "../models/Itens";
 
+import { EmailController } from "./EmailController"
+
+let email: EmailController = new EmailController();
+
 export class ServicosController {
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
@@ -133,7 +137,11 @@ export class ServicosController {
         servico.status = 'Concluído'
 
         await servico.save()
-
+        let cliente = servico.cliente;
+        let titulo = "Sua Bicicleta está pronta, Oficina do seu João agradece sua preferência";
+        let mensagem = `Sua bicicleta está pronta. Foram realizados os seguintes serviços: ${servico.descricao}. Agradecemos sua preferência!`;
+        
+        email.emailAutomaticco(cliente, titulo, mensagem);
 
         return res.status(200).json(servico);
     }
