@@ -27,7 +27,7 @@ export class ClientesController {
             cidade,
             status,
         }).save()
-
+        
         let titulo = 'Você acaba de se cadastra no site da Oficina de bicicleas do seu João!'
         let mensagem = 'A Oficina de bicicletas do seu João agradece pela sua preferência! Qualquer dúvida entre em contato por este email ou procure a nossa loja'
         email.emailAutomaticco(cliente, titulo, mensagem)
