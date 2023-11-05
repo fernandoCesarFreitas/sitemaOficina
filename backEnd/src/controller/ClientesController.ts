@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { Clientes } from "../models/Clientes";
 import { EmailController } from "./EmailController"
 
-let email: EmailController = new EmailController();
+let email1: EmailController = new EmailController();
 
 export class ClientesController {
 
@@ -28,9 +28,9 @@ export class ClientesController {
             status,
         }).save()
         
-        let titulo = 'Você acaba de se cadastra no site da Oficina de bicicleas do seu João!'
-        let mensagem = 'A Oficina de bicicletas do seu João agradece pela sua preferência! Qualquer dúvida entre em contato por este email ou procure a nossa loja'
-        email.emailAutomaticco(cliente, titulo, mensagem)
+        let titulo = 'Você acaba de se cadastra no site da Oficina de bicicletas do seu João!'
+        let mensagem = 'A Oficina de bicicletas do seu João agradece pela sua preferência! Qualquer dúvida entre em contato por este email ou procure a nossa loja desde ja agrafecemos'
+        email1.emailAutomaticco(cliente, titulo, mensagem)
         return res.status(200).json(cliente);
     }
 
