@@ -63,13 +63,13 @@ export class EmailController {
                 ciphers: 'SSLv3',
             },
             auth: {
-                user: 'oficina.crieti@hotmail.com',
-                pass: 'jucabala123',
+                user: 'fernandochfreitas05071988@outlook.com',//oficina.crieti@hotmail.com
+                pass: 'ipjnqq3rr#',//jucabala123
             },
         }
 
         let mailOptions = {
-            from: 'oficina.crieti@hotmail.com',
+            from: 'fernandochfreitas05071988@outlook.com',//oficina.crieti@hotmail.com
             to: email,
             subject: titulo,
             html: mensagem,

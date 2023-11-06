@@ -9,6 +9,7 @@ import autenticacaoRoutes from './routes/autenticacao'
 import servicoRoutes from './routes/servicos'
 import tiposervicoRoutes from './routes/tipoServicos'
 import emailRoutes from './routes/email';
+import { basicAuth } from "./middlewares/basics-auth";
 
 let server: Express = express();
 let port: Number = Number(process.env.server_port || 3000);
