@@ -6,16 +6,35 @@ import { Menu } from "@/components/Menu";
 import { User } from "@/contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { UserContainer, ContentContainer } from "./styles";
+import { UserContainer, ContentContainer, ModalContainer } from "./styles";
+import { UserForm } from "./components/userForm";
 
 export default function Users() {
   const [userList, setUserList] = useState<User[]>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const customModalStyles = {
+    content: {
+      position: "absolute" as "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
 
   useEffect(() => {
     axios
       .get<User[]>("http://localhost:3000/usuarios")
       .then((response) => setUserList(response.data));
   }, []);
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
 
   return (
     <>
@@ -24,7 +43,7 @@ export default function Users() {
         <UserContainer>
           <Menu />
           <ContentContainer>
-            <Button label="Criar usuário" />
+            <Button label="Criar usuário" onClick={openModal} />
             {userList?.map((user) => {
               return (
                 <Card key={user.id}>
@@ -37,6 +56,10 @@ export default function Users() {
           </ContentContainer>
         </UserContainer>
       </AuthGuard>
+      <ModalContainer isOpen={isModalOpen} style={customModalStyles}>
+        <h1>criar usuario</h1>
+        <UserForm />
+      </ModalContainer>
     </>
   );
 }

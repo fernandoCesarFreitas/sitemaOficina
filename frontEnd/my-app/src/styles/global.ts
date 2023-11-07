@@ -23,4 +23,6 @@ export const GlobalStyle = createGlobalStyle`
         box-shadow: 0 0 0 0;
         outline: 0;
     }
+
+    
 `;

@@ -115,9 +115,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     }
 
-    // Definindo o estado de carregamento como false
-    setLoading(false);
-
     return;
   };
 

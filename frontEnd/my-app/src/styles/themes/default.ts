@@ -2,7 +2,7 @@
 
 export const defaultTheme = {
   primary: "#4E6E96", // Azul
-  secondary: "#D98324", // Laranja
+  secondary: "#403d38", // Laranja
   danger: "#E74C3C", // Vermelho
   success: "#5CB85C", // Verde
   fontColor: "#333", // Cor do texto principal no modo claro

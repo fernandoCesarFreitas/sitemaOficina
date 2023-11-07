@@ -5,6 +5,7 @@ import {
   BaseEntity,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 
 import { Bicicleta } from "./Bicicletas";
@@ -33,18 +34,33 @@ export class Servicos extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
-  @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados)
+  bicicleta_id: number;
+
+  @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados,{ eager: true })
+  @JoinColumn({ name: "bicicleta_id" })
   bicicleta: Bicicleta;
 
-  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos)
+  tipo_servico_id: number;
+
+  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos ,{ eager: true })
+  @JoinColumn({ name: "tipo_servico_id" })
   tipoServico: TipoServico;
 
-  @ManyToOne(() => Clientes, cliente => cliente.servicosRealizados)
+  cliente_id: number;
+
+  @ManyToOne(() => Clientes, cliente => cliente.servicosRealizados ,{ eager: true })
+  @JoinColumn({ name: "cliente_id" })
   cliente: Clientes;
 
-  @ManyToOne(() => Financeiro, financeiro => financeiro.servicosRealizados)
+  financeiro_id: number;
+
+  @ManyToOne(() => Financeiro, financeiro => financeiro.servicosRealizados,{ eager: true })
+  @JoinColumn({ name: "financeiro_id" })
   financeiro: Financeiro;
 
-  @ManyToOne(() => Itens, item => item.servico)
+  item_servico: number;
+
+  @ManyToOne(() => Itens, item => item.servico,{ eager: true })
+  @JoinColumn({ name: "item_servico" })
   itensUtilizados: Itens;
 }
