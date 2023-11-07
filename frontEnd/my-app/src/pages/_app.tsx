@@ -6,6 +6,8 @@ import type { AppProps } from "next/app";
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { Sun, Moon } from "phosphor-react";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer,  } from 'react-toastify';
 
 // Componente principal que renderiza o aplicativo
 export default function App({ Component, pageProps }: AppProps) {
@@ -51,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </button>
           {/* Componente principal do aplicativo */}
           <Component {...pageProps} />
+          <ToastContainer />
         </ThemeProvider>
       </AuthProvider>
     </div>

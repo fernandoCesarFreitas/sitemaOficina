@@ -6,10 +6,10 @@ export class UsuarioController {
   async list(req: Request, res: Response): Promise<Response> {
     let nome = req.query.nome;
 
-    let users: Usuario[] = await Usuario.findBy({
-      nome: nome ? ILike(`%${nome}%`) : undefined,
-    }); //aqui na lista nao usamos as {}
-    return res.status(200).json(users);
+    let usuario: Usuario[] = await Usuario.find({
+      where: { status: "Ativo" },
+    });
+    return res.status(200).json(usuario);
   }
 
   async create(req: Request, res: Response): Promise<Response> {
@@ -42,10 +42,12 @@ export class UsuarioController {
   }
 
   async delete(req: Request, res: Response): Promise<Response> {
+    console.log('chegou aqui')
     let body = req.body;
     let usuario: Usuario = res.locals.usuario;
     usuario.status = 'Inativo';
-    return res.status(200).json();
+    await usuario.save();
+    return res.status(200).json(usuario);
   }
 
   async find(req: Request, res: Response): Promise<Response> {

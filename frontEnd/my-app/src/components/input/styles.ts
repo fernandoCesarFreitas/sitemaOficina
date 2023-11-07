@@ -16,7 +16,8 @@ export const InputContainer = styled.div<InputProps>`
     border: none; //remove a borda
     border-bottom: 1px solid  ${(props) => props.theme["gray-100"]}; //adiciona uma borda embaixo
     outline: none; //remove a borda quando clicado
-
+    background: transparent;
+    color: ${(props) => props.theme.fontColor};
     &:focus {
       //funciona no css normal
       border-bottom: 2px solid  ${(props) => props.theme.primary}; //aumenta a borda embaixo quando clicado

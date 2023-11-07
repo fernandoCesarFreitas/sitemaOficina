@@ -15,3 +15,8 @@ export const ButtonContainer = styled.div`
   gap: 12px;
   margin-top: 2rem;
 `;
+export const ItemsFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
