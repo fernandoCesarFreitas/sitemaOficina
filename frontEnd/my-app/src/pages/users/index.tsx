@@ -6,9 +6,10 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { Button } from "@/components/button";
-import Modal, { Styles } from "react-modal";
+import { Styles } from "react-modal";
 import { UserForm } from "./components/userForm";
 import { User } from "@/contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const customModalStyles = {
   content: {
@@ -26,12 +27,24 @@ export default function Users() {
   const [user, setUser] = useState<User>();
 
   function handleDelete(user: User) {
-    console.log(user);
-    axios.delete<User>(`http://localhost:3000/usuarios/${user.id}`).then((response) => {
-      // axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
-      //   setUserList(response.data);
-      });
-    // });
+    // Exibir um prompt de confirmação antes de deletar o usuário
+    const confirmDeletion = window.confirm(
+      `Tem certeza que deseja excluir o usuário ${user.nome}?`
+    );
+
+    if (confirmDeletion) {
+      axios
+        .delete<User>(`http://localhost:3000/usuarios/${user.id}`)
+        .then(() => {
+          toast.success("Usuário deletado com sucesso");
+          // Atualiza o estado userList após a exclusão do usuário
+          setUserList(userList.filter((u) => u.id !== user.id));
+        })
+        .catch((error) => {
+          toast.error("Erro ao deletar usuário");
+          console.error("Erro ao excluir usuário: ", error);
+        });
+    }
   }
 
   function openCreateUserModal() {
@@ -97,14 +110,18 @@ export default function Users() {
 
   return (
     <AuthGuard>
-      <Header label="Users" />
+      <Header label="Usuários" />
       <UserContainer>
         <Menu />
         <ContentContainer>
           <Button label="Criar usuário" onClick={openCreateUserModal} />
           {userList.map((user) => {
             return (
-              <Card key={user.id} openModal={() => openEditUserModal(user)}  onDelete={() => handleDelete(user)}>
+              <Card
+                key={user.id}
+                openModal={() => openEditUserModal(user)}
+                onDelete={() => handleDelete(user)}
+              >
                 <CardInfo title="ID" data={user.id} />
                 <CardInfo title="Nome" data={user.nome} />
                 <CardInfo title="E-mail" data={user.email} />
