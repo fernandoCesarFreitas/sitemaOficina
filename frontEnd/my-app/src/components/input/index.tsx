@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  id: string;
+  id: string ;
   placeholder?: string;
   whidth?: number;
   error?: string;
@@ -19,6 +19,8 @@ export function Input({
   ...rest
 }: InputProps) {
   const { register } = useFormContext();
+
+
 
   return (
     //

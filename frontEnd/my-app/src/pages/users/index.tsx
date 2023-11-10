@@ -11,6 +11,7 @@ import { UserForm } from "./components/userForm";
 import { User } from "@/contexts/AuthContext";
 import { toast } from "react-toastify";
 
+// Estilos personalizados para os modais
 const customModalStyles = {
   content: {
     position: "absolute",
@@ -20,64 +21,74 @@ const customModalStyles = {
   },
 };
 
+// Componente principal Users
 export default function Users() {
-  const [userList, setUserList] = useState<User[]>([]);
-  const [isModalCreateUserOpen, setIsModalCreateUserOpen] = useState(false);
-  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
-  const [user, setUser] = useState<User>();
+  const [userList, setUserList] = useState<User[]>([]); // Estado para armazenar a lista de usuários
+  const [isModalCreateUserOpen, setIsModalCreateUserOpen] = useState(false); // Estado para controlar a abertura do modal de criação de usuário
+  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false); // Estado para controlar a abertura do modal de edição de usuário
+  const [user, setUser] = useState<User>(); // Estado para armazenar os dados de um usuário específico
 
+  // Função para lidar com a exclusão de um usuário
   function handleDelete(user: User) {
-    // Exibir um prompt de confirmação antes de deletar o usuário
+    // Exibe um prompt de confirmação antes de deletar o usuário
     const confirmDeletion = window.confirm(
       `Tem certeza que deseja excluir o usuário ${user.nome}?`
     );
 
     if (confirmDeletion) {
+      // Envia requisição para deletar o usuário
       axios
         .delete<User>(`http://localhost:3000/usuarios/${user.id}`)
         .then(() => {
-          toast.success("Usuário deletado com sucesso");
+          toast.success("Usuário deletado com sucesso"); // Exibe mensagem de sucesso
           // Atualiza o estado userList após a exclusão do usuário
           setUserList(userList.filter((u) => u.id !== user.id));
         })
         .catch((error) => {
-          toast.error("Erro ao deletar usuário");
+          toast.error("Erro ao deletar usuário"); // Exibe mensagem de erro
           console.error("Erro ao excluir usuário: ", error);
         });
     }
   }
 
+  // Função para abrir o modal de criação de usuário
   function openCreateUserModal() {
     setIsModalCreateUserOpen(true);
   }
 
+  // Função para fechar o modal de criação de usuário
   function closeCreateUserModal() {
+    // Atualiza a lista de usuários após o fechamento do modal
     axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
       setUserList(response.data);
     });
     setIsModalCreateUserOpen(false);
   }
 
+  // Função para abrir o modal de edição de usuário
   function openEditUserModal(editUser: User) {
     setUser(editUser);
     setIsModalEditUserOpen(true);
   }
 
+  // Função para fechar o modal de edição de usuário
   function closeEditUserModal() {
+    // Atualiza a lista de usuários após o fechamento do modal de edição
     axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
       setUserList(response.data);
     });
     setIsModalEditUserOpen(false);
   }
 
+  // Hook useEffect para carregar a lista de usuários ao carregar a página
   useEffect(() => {
     axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
       setUserList(response.data);
     });
   }, []);
 
+  // Cria o modal de criação de usuário
   const createUserModal = useMemo(() => {
-    // Realiza uma operação computacionalmente custosa com base nos dados
     return (
       <ModalContainer
         isOpen={isModalCreateUserOpen}
@@ -86,14 +97,13 @@ export default function Users() {
         style={customModalStyles as Styles}
       >
         <h1>Criar Novo Usuário</h1>
-
         <UserForm closeModal={closeCreateUserModal} />
       </ModalContainer>
     );
-  }, [isModalCreateUserOpen]); // Apenas criar a modal quando isModalOpen mudar
+  }, [isModalCreateUserOpen]);
 
+  // Cria o modal de edição de usuário
   const editUserModal = useMemo(() => {
-    // Realiza uma operação computacionalmente custosa com base nos dados
     return (
       <ModalContainer
         isOpen={isModalEditUserOpen}
@@ -102,12 +112,12 @@ export default function Users() {
         style={customModalStyles as Styles}
       >
         <h1>Editar Usuário</h1>
-
         <UserForm closeModal={closeEditUserModal} userData={user} />
       </ModalContainer>
     );
-  }, [isModalEditUserOpen, user]); // Apenas criar a modal quando isModalOpen mudar
+  }, [isModalEditUserOpen, user]);
 
+  // Renderização do componente
   return (
     <AuthGuard>
       <Header label="Usuários" />
@@ -135,3 +145,4 @@ export default function Users() {
     </AuthGuard>
   );
 }
+
