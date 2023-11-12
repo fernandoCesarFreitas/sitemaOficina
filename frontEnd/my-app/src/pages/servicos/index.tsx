@@ -1,7 +1,7 @@
 import { AuthGuard } from "@/components/AuthGuard";
 import { Button } from "@/components/button";
 import { Header } from "@/components/Header";
-import { Card, CardInfo } from "@/components/Header/Card";
+import { Card, CardInfo } from "@/components/Card";
 import { Menu } from "@/components/Menu";
 import { User } from "@/contexts/AuthContext";
 import axios from "axios";

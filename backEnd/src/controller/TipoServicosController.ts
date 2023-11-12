@@ -19,10 +19,13 @@ export class TipoServicoController {
     }
 
     async list(req: Request, res: Response): Promise<Response> {
-        let tiposServico: TipoServico[] = await TipoServico.find();
-
-        return res.status(200).json(tiposServico);
-    }
+        let nome = req.query.nome;
+    
+        let tipoServico: TipoServico[] = await TipoServico.find({
+          where: { status: "Ativo" },
+        });
+        return res.status(200).json(tipoServico);
+      }
 
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;

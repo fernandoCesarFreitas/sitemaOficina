@@ -52,6 +52,6 @@ rotas.post("/servicos", validarPayload, controller.create);
 
 rotas.put("/servicos/:id", validar, validarPayload, controller.update);
 
-rotas.delete("/servicos/id", validar, controller.delete);
+rotas.delete("/servicos/:id", validar, controller.delete);
 
 export default rotas;

@@ -48,6 +48,6 @@ rotas.post("/tipoServico", validarPayload, controller.create);
 
 rotas.put("/tipoServico/:id", validar, validarPayload, controller.update);
 
-rotas.delete("/tipoServico/id", validar, controller.delete);
+rotas.delete("/tipoServico/:id", validar, controller.delete);
 
 export default rotas;

@@ -1,5 +1,5 @@
 import { AuthGuard } from "@/components/AuthGuard";
-import { Card, CardInfo } from "@/components/Header/Card";
+import { Card, CardInfo } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";
 import axios from "axios";
