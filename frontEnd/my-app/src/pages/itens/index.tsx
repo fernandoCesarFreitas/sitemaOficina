@@ -60,9 +60,6 @@ export default function Items() {
         });
     }
     toast.success("Item deletado com sucesso"); // Exibe mensagem de sucesso
-    axios.get<Item[]>("http://localhost:3000/itens").then((response) => {
-      setItemList(response.data);
-    });
   }
 
   // Função para abrir o modal de criação de usuário

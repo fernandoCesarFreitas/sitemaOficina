@@ -63,7 +63,7 @@ export class ItensController {
         itens.status = 'Inativo';
         await itens.save();
 
-        return res.status(200);
+        return res.status(200).json(itens);
     }
 
     async find(req: Request, res: Response): Promise<Response> {

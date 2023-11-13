@@ -92,7 +92,7 @@ export class ServicosController {
         let tipoServico = await TipoServico.findOneBy({ id: tipoServicoId });
         let bicicleta = await Bicicleta.findOneBy({ id: bicicletaId });
         let cliente = await Clientes.findOneBy({ id: clienteId });
-        let financeiro = await Financeiro.findOneBy({ id: financeiroId });
+        // let financeiro = await Financeiro.findOneBy({ id: financeiroId });
         let itens = await Itens.findOneBy({ id: itensUtilizadosId });
 
         if (!tipoServico || tipoServico.status == 'Inativo') {
@@ -104,21 +104,21 @@ export class ServicosController {
         if (!cliente || cliente.status == 'Inativo') {
             return res.status(400).json({ mensagem: "Cliente não encontrado" })
         }
-        if (!financeiro) {
-            return res.status(400).json({ mensagem: "Financeiro não encontrado" })
-        }
+        // if (!financeiro) {
+        //     return res.status(400).json({ mensagem: "Financeiro não encontrado" })
+        // }
         if (!itens || itens.quantidade < 1 || itens.status == 'Inativo') {
             return res.status(400).json({ mensagem: "Item não encontrado ou quantidade insuficiente" })
         }
 
-        servico.dataEntrada = dataEntrada,
+        // servico.dataEntrada = dataEntrada,
             servico.descricao = descricao,
             servico.status = status,
             servico.valor = valor,
             servico.bicicleta = bicicleta,
             servico.tipoServico = tipoServico,
             servico.cliente = cliente,
-            servico.financeiro = financeiro,
+            // servico.financeiro = financeiro,
             servico.itensUtilizados = itens,
             await servico.save()
 
