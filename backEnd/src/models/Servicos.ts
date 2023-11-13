@@ -34,6 +34,9 @@ export class Servicos extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
+  @Column({ nullable: true })
+  observacoes: string;
+
   bicicleta_id: number;
 
   @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados,{ eager: true })

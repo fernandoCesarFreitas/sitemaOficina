@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { toast } from "react-toastify";
 import { Styles } from "react-modal";
-import { TypeForm } from "./customerForm";
+import { CustomerForm } from "./customerForm";
 
 export type Customer = {
   id: number;
@@ -19,8 +19,8 @@ export type Customer = {
   cpf: string;
   endereco: string;
   cidade: string;
+  status: string;
 };
-
 
 const customModalStyles = {
   content: {
@@ -33,8 +33,9 @@ const customModalStyles = {
 
 // Componente principal Clientes
 export default function Types() {
-  const [customerList, setCustomerList ] = useState<Customer[]>([]); // Estado para armazenar a lista de clientes
-  const [isModalCreateCustomerOpen, setIsModalCreateCustomerOpen] = useState(false); // Estado para controlar a abertura do modal de criação de cliente
+  const [customerList, setCustomerList] = useState<Customer[]>([]); // Estado para armazenar a lista de clientes
+  const [isModalCreateCustomerOpen, setIsModalCreateCustomerOpen] =
+    useState(false); // Estado para controlar a abertura do modal de criação de cliente
   const [isModalEditCustomerOpen, setIsModalEditCustomerOpen] = useState(false); // Estado para controlar a abertura do modal de edição de cliente
   const [customer, setCustomer] = useState<Customer>(); // Estado para armazenar os dados de um cliente específico
 
@@ -42,21 +43,23 @@ export default function Types() {
   function handleDelete(customer: Customer) {
     // Exibe um prompt de confirmação antes de deletar o usuário
     const confirmDeletion = window.confirm(
-      `Tem certeza que deseja excluir o cliente ${customer.nome}?`
+      `Tem certeza que deseja excluir o Cliente ${customer.nome}?`
     );
+    console.log(confirmDeletion);
 
     if (confirmDeletion) {
       // Envia requisição para deletar o usuário
       axios
         .delete<Customer>(`http://localhost:3000/clientes/${customer.id}`)
-        .then(() => {
-          toast.success("tipo deletado com sucesso"); // Exibe mensagem de sucesso
+        .then((response) => {
+          //estou comm problema aqui ele nao entra nes then para quebrar um galho coloquei um toast e o atualizar a lista fora
+          toast.success("Cliente deletado com sucesso"); // Exibe mensagem de sucesso
           // Atualiza o estado userList após a exclusão do usuário
           setCustomerList(customerList.filter((u) => u.id !== customer.id));
         })
         .catch((error) => {
-          toast.error("Erro ao deletar Cliente"); // Exibe mensagem de erro
-          console.error("Erro ao excluir Cliente: ", error);
+          toast.error("Erro ao deletar cliente"); // Exibe mensagem de erro
+          console.error("Erro ao excluir cliente: ", error);
         });
     }
   }
@@ -69,7 +72,7 @@ export default function Types() {
   // Função para fechar o modal de criação de usuário
   function closeCreateCustomerModal() {
     // Atualiza a lista de usuários após o fechamento do modal
-    axios.get<Customer[]>("http://localhost:3000/clentes").then((response) => {
+    axios.get<Customer[]>("http://localhost:3000/clientes").then((response) => {
       setCustomerList(response.data);
     });
     setIsModalCreateCustomerOpen(false);
@@ -107,7 +110,7 @@ export default function Types() {
         style={customModalStyles as Styles}
       >
         <h1>Criar Novo Cliente</h1>
-        <TypeForm closeModal={closeCreateCustomerModal} />
+        <CustomerForm closeModal={closeCreateCustomerModal} />
       </ModalContainer>
     );
   }, [isModalCreateCustomerOpen]);
@@ -122,7 +125,10 @@ export default function Types() {
         style={customModalStyles as Styles}
       >
         <h1>Editar Cliente</h1>
-        <TypeForm closeModal={closeEditCustomerModal} customerData={customer} />
+        <CustomerForm
+          closeModal={closeEditCustomerModal}
+          customerData={customer}
+        />
       </ModalContainer>
     );
   }, [isModalEditCustomerOpen, customer]);
@@ -130,7 +136,7 @@ export default function Types() {
   // Renderização do componente
   return (
     <AuthGuard>
-      <Header label="Usuários" />
+      <Header label="Clientes" />
       <UserContainer>
         <Menu />
         <ContentContainer>
@@ -155,4 +161,3 @@ export default function Types() {
     </AuthGuard>
   );
 }
-

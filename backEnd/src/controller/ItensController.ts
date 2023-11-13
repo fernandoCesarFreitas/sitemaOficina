@@ -2,6 +2,16 @@ import { Request, Response } from "express";
 import { Itens } from "../models/Itens";
 
 export class ItensController {
+    async list(req: Request, res: Response): Promise<Response> {
+        let nome = req.query.nome;
+    
+        let itens: Itens[] = await Itens.find({
+          where: { status: "Ativo" },
+        });
+        return res.status(200).json(itens);
+      }
+
+
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
 
@@ -10,7 +20,6 @@ export class ItensController {
         let valor = body.valor;
         let quantidade = body.quantidade;
         let maoDeObra = body.maoDeObra;
-        let observacoes = body.observacoes;
         let status = "Ativo";
 
         let item: Itens = await Itens.create({
@@ -19,18 +28,12 @@ export class ItensController {
             valor,
             quantidade,
             maoDeObra,
-            observacoes,
             status,
         }).save();
 
         return res.status(200).json(item);
     }
 
-    async list(req: Request, res: Response): Promise<Response> {
-        let itens: Itens[] = await Itens.find();
-
-        return res.status(200).json(itens);
-    }
 
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
@@ -41,7 +44,6 @@ export class ItensController {
         let valor = body.valor;
         let quantidade = body.quantidade;
         let maoDeObra = body.maoDeObra;
-        let observacoes = body.observacoes;
         let status = 'Ativo';
 
         itens.nome = nome;
@@ -49,7 +51,6 @@ export class ItensController {
         itens.valor = valor;
         itens.quantidade = quantidade;
         itens.maoDeObra = maoDeObra;
-        itens.observacoes = observacoes;
         itens.status = status;
         await itens.save();
 

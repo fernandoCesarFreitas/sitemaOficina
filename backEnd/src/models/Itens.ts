@@ -1,4 +1,4 @@
-import {
+  import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -31,8 +31,7 @@ export class Itens extends BaseEntity {
   @Column({ length: 255 })
   maoDeObra: string;
 
-  @Column({ length: 255 })
-  observacoes: string;
+
 
   @OneToMany(() => Servicos, servico => servico.itensUtilizados)
   servico: Servicos[];

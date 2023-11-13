@@ -126,7 +126,7 @@ export default function Types() {
   // Renderização do componente
   return (
     <AuthGuard>
-      <Header label="Usuários" />
+      <Header label="Tipos de Serviços" />
       <UserContainer>
         <Menu />
         <ContentContainer>

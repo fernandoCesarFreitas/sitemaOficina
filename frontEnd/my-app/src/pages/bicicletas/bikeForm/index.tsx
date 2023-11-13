@@ -9,39 +9,33 @@ import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
-import { Customer } from "..";
+import { Bike } from "..";
 
 // Definição das propriedades necessárias para o UserForm
-interface CustomerModalProps {
+interface BikeModalProps {
   closeModal: Function; // Função para fechar o modal
-  customerData?: Customer; // Dados do tipo, se existirem (para edição)
+  bikeData?: Bike; // Dados do tipo, se existirem (para edição)
 }
 
 // Esquema de validação para os dados do novo usuário
-const newCustomerValidationSchema = zod.object({
-  nome: zod.string().min(1, "Informe uma nome válido"),
-  telefone: zod.string().min(1, "Informe um telefone válido"),
-  email: zod.string().min(1, "Informe um email válido").email(),
-  cpf: zod.string().min(1, "Informe um cpf válido"),
-  endereco: zod.string().min(1, "Informe um endereco válido"),
-  cidade: zod.string().min(1, "Informe uma cidade válida"),
+const newBikeValidationSchema = zod.object({
+  modelo: zod.string().min(1, "Informe uma descrição válida"),
+  tipo: zod.string().min(1, "Informe o tipo "),
+  cor: zod.string().min(1, "Informe a cor "),
 });
 
 // Tipo dos dados do usuário baseado no esquema de validação
-type CustomerData = zod.infer<typeof newCustomerValidationSchema>;
+type BikeData = zod.infer<typeof newBikeValidationSchema>;
 
 // Componente funcional UserForm
-export function CustomerForm({ closeModal, customerData }: CustomerModalProps) {
+export function BikeForm({ closeModal, bikeData }: BikeModalProps) {
   // Inicialização do useForm para gerenciar o formulário
-  const methods = useForm<CustomerData>({
-    resolver: zodResolver(newCustomerValidationSchema),
+  const methods = useForm<BikeData>({
+    resolver: zodResolver(newBikeValidationSchema),
     defaultValues: {
-      nome: "",
-      telefone: "",
-      email: "",
-      cpf: "",
-      endereco: "",
-      cidade: "",
+      modelo: "",
+      tipo: "",
+      cor: "",
     },
   });
 
@@ -53,35 +47,32 @@ export function CustomerForm({ closeModal, customerData }: CustomerModalProps) {
 
   // Atualiza os campos do formulário se existirem dados do usuário
   useEffect(() => {
-    if (customerData) {
-      setValue("nome", customerData.nome);
-      setValue("telefone", customerData.telefone);
-      setValue("email", customerData.email);
-      setValue("cpf", customerData.cpf);
-      setValue("endereco", customerData.endereco);
-      setValue("cidade", customerData.cidade);
+    if (bikeData) {
+      setValue("modelo", bikeData.modelo);
+      setValue("tipo", bikeData.tipo);
+      setValue("cor", bikeData.cor);
     }
-  }, [setValue, customerData]);
+  }, [setValue, bikeData]);
 
   // Função para manipular a criação ou edição do usuário
-  async function handleCrateEditType(data: CustomerData) {
+  async function handleCrateEditBike(data: BikeData) {
     try {
       console.log(data);
-      if (customerData) {
+      if (bikeData) {
         // Se existirem dados do usuário, realiza a requisição PUT para edição
         await axios.put(
-          `http://localhost:3000/clientes/${customerData.id}`,
+          `http://localhost:3000/bicicletas/${bikeData.id}`,
           data
         );
-        toast.success("Cliente editado com sucesso");
+        toast.success("Bicicleta editada com sucesso!");
       } else {
         // Caso contrário, realiza a requisição POST para criação de um novo usuário
-        await axios.post("http://localhost:3000/clientes", data);
-        toast.success("Cliente criado com sucesso");
+        await axios.post("http://localhost:3000/bicicletas", data);
+        toast.success("Bicicleta criada com sucesso!");
       }
       closeModal(); // Fecha o modal após o sucesso da requisição
     } catch (error) {
-      toast.error("Erro ao criar/editar Cliente");
+      toast.error("Erro ao criar/editar Bicicleta");
     }
   }
 
@@ -89,19 +80,16 @@ export function CustomerForm({ closeModal, customerData }: CustomerModalProps) {
   return (
     <FormProvider {...methods}>
       <DivContainer>
-        <form onSubmit={handleSubmit(handleCrateEditType)}>
+        <form onSubmit={handleSubmit(handleCrateEditBike)}>
           <ItemsFormContainer>
             {/* Inputs do formulário com os respectivos erros */}
-            <Input label="Nome" id="nome" error={errors.nome?.message} />
             <Input
-              label="Telefone"
-              id="telefone"
-              error={errors.telefone?.message}
+              label="Modelo"
+              id="modelo"
+              error={errors.modelo?.message}
             />
-            <Input label="Email" id="email" error={errors.email?.message} />
-            <Input label="CPF" id="cpf" error={errors.cpf?.message} />
-            <Input label="Endereço" id="endereco" error={errors.endereco?.message} />
-            <Input label="Cidade" id="cidade" error={errors.cidade?.message} />
+            <Input label="Tipo" id="tipo" error={errors.tipo?.message} />
+            <Input label="Cor" id="cor" error={errors.cor?.message} />
           </ItemsFormContainer>
           <ButtonContainer>
             {/* Botões de enviar e cancelar */}

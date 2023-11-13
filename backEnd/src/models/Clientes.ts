@@ -32,7 +32,7 @@ export class Clientes extends BaseEntity {
   @Column({ length: 255 })
   endereco: string;
 
-  @Column({ length: 255 })
+  @Column({ length: 255 })  
   cidade: string;
 
   @OneToMany(() => Servicos, servico => servico.cliente)

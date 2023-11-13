@@ -21,10 +21,14 @@ export class BicicletaController {
     }
 
     async list(req: Request, res: Response): Promise<Response> {
-        let bicicletas: Bicicleta[] = await Bicicleta.find();
-
+        let nome = req.query.nome;
+    
+        let bicicletas: Bicicleta[] = await Bicicleta.find({
+          where: { status: "Ativo" },
+        });
         return res.status(200).json(bicicletas);
     }
+      
 
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
@@ -42,11 +46,11 @@ export class BicicletaController {
 
         bicicleta.modelo = modelo;
         bicicleta.tipo = tipo;
-        bicicleta.cor = cor;
+        bicicleta.cor = cor;    
         bicicleta.status = status;
         await bicicleta.save();
 
-        return res.status(200);
+        return res.status(200).json(bicicleta);
     }
 
     async delete(req: Request, res: Response): Promise<Response> {

@@ -9,6 +9,7 @@ import { Itens } from "../models/Itens";
 import { EmailController } from "./EmailController"
 
 let email: EmailController = new EmailController();
+//adicionar campo obsservacoes
 
 export class ServicosController {
     async create(req: Request, res: Response): Promise<Response> {

@@ -9,10 +9,9 @@ async function validarPayload(req: Request, res: Response, next: NextFunction): 
     let schema = yup.object({
         nome: yup.string().min(3).max(255).required(),
         descricao: yup.string().min(3).max(255).required(),
-        valor: yup.number().required(),
-        quantidade: yup.number().required(),
-        maoDeObra: yup.string().min(3).max(255).required(),
-        observacoes: yup.string().min(3).max(255).required(),
+        valor: yup.number().typeError('O campo valor deve ser um número.').required('O valor é obrigatório'),
+        quantidade: yup.number().required(''),
+        maoDeObra: yup.string().min(3).max(255),
     });
 
     let payload = req.body;
@@ -52,6 +51,6 @@ rotas.post("/itens", validarPayload, controller.create);
 
 rotas.put("/itens/:id", validar, validarPayload, controller.update);
 
-rotas.delete("/itens/id", validar, controller.delete);
+rotas.delete("/itens/:id", validar, controller.delete);
 
 export default rotas;

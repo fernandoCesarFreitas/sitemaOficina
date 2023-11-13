@@ -24,7 +24,7 @@ server.use((req: Request, res: Response, next: NextFunction) => {
 
 //chama a rota de usuarios
 server.use(autenticacaoRoutes);
-server.use(basicAuth,usuariosRoutes);//
+server.use(usuariosRoutes);//basicAuth,
 server.use(bicicletasRoutes);//basicAuth,
 server.use(clientesRoutes);//basicAuth,
 server.use(financeiroRoutes);//basicAuth,
