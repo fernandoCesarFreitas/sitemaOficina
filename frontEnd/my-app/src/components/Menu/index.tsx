@@ -7,26 +7,22 @@ import {
   NavLink,
 } from "./styles";
 const RotatingSpiral = () => {
-  
-    return (
-      <Spiral  weight="bold" size={62} alt="Home" >
-        <animate
-          values="0;1;0"
-          dur="6s"
-          repeatCount="indefinite"
-        ></animate>
-        <animateTransform
-          attributeName="transform"
-          attributeType="XML"
-          type="rotate"
-          dur="8s"
-          from="0 0 0"
-          to="360 0 0"
-          repeatCount="indefinite"
-        ></animateTransform>
-      </Spiral>
-    );
-  };
+  return (
+    <Spiral weight="bold" size={62} alt="Home">
+      <animate values="0;1;0" dur="6s" repeatCount="indefinite"></animate>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        dur="8s"
+        from="360 0 0"  // Invertendo os valores de from e to
+        to="0 0 0"      // Invertendo os valores de from e to
+        repeatCount="indefinite"
+      ></animateTransform>
+    </Spiral>
+  );
+};
+
   
 
 
@@ -60,7 +56,7 @@ export function Menu() {
             <GearSix size={32}alt="Tipo de Serviços" />{/*tipo de servicos*/}
           </NavLink>
           <NavLink href="/relatorios">
-            <ClipboardText size={32} alt="Relatórios"/>{/*relatorios*/}
+            <ClipboardText size={32} alt="Relatórios" />{/*relatorios*/}
           </NavLink>
         </NavLinkContainer>
       </ContentContainer>
