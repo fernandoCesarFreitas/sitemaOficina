@@ -46,8 +46,8 @@ export function Menu() {
           <NavLink href="/servicos">
             <Wrench size={32} alt="Serviços"/>{/*servicos*/}
           </NavLink>
-          <NavLink href="/financeiro">
-            <Money size={32} alt="Financeiro"/>{/*financeiro*/}
+          <NavLink href="/tipoPagamento">
+            <Money size={32} alt="Tipo de pagamentos"/>{/*tipo de pagamento*/}
           </NavLink>
           <NavLink href="/itens">
             <Package size={32} alt="Itens"/>{/*itens*/}
