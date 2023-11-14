@@ -25,13 +25,14 @@ const newTypeValidationSchema = zod.object({
 // Tipo dos dados do usuário baseado no esquema de validação
 type PayData = zod.infer<typeof newTypeValidationSchema>;
 
+
 // Componente funcional UserForm
-export function TypeForm({ closeModal, payData }: PayModalProps) {
+export function PayForm({ closeModal, payData }: PayModalProps) {
   // Inicialização do useForm para gerenciar o formulário
   const methods = useForm<PayData>({
     resolver: zodResolver(newTypeValidationSchema),
     defaultValues: {
-      nome: "",
+      nome: ""
     },
   });
 
@@ -55,13 +56,13 @@ export function TypeForm({ closeModal, payData }: PayModalProps) {
       if (payData) {
         // Se existirem dados do usuário, realiza a requisição PUT para edição
         await axios.put(
-          `http://localhost:3000/MetodosDePagamentos/${payData.id}`,
+          `http://localhost:3000/metodosDePagamentos/${payData.id}`,
           data
         );
         toast.success("Modo de Pagamento editado com sucesso");
       } else {
         // Caso contrário, realiza a requisição POST para criação de um novo usuário
-        await axios.post("http://localhost:3000/MetodosDePagamentos", data);
+        await axios.post("http://localhost:3000/metodosDePagamentos", data);
         toast.success("Modo de Pagamento criado com sucesso");
       }
       closeModal(); // Fecha o modal após o sucesso da requisição

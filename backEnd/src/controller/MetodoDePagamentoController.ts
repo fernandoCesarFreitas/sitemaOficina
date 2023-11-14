@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 
 
 export class MetodoDePagamentoController {
+
+    
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
         let nome = body.nome;
@@ -15,6 +17,8 @@ export class MetodoDePagamentoController {
 
         return res.status(200).json(metodoDePagamento);
     }
+
+
     async list(req: Request, res: Response): Promise<Response> {
         let nome = req.query.nome;
 
@@ -24,16 +28,21 @@ export class MetodoDePagamentoController {
         return res.status(200).json(metodosDePagamentos);
     }
 
+
+
     async find(req: Request, res: Response): Promise<Response> {
-        let metodoDePagamento: MetodoDePagamento = res.locals.metodoDePagamento;
+        let metodoDePagamento: MetodoDePagamento = res.locals.metodosDePagamentos;
         return res.status(200).json(metodoDePagamento);
     }
 
+
+
     async update(req: Request, res: Response): Promise<Response> {
         let body = req.body;
-
-        let metodoDePagamento: MetodoDePagamento = res.locals.metodoDePagamento;
-
+        console.log(body)
+        let metodoDePagamento: MetodoDePagamento = res.locals.metodosDePagamentos;
+        console.log('CHEGOU AQUI')
+            console.log(metodoDePagamento)
         if (!metodoDePagamento) {
             return res.status(400).json({ mensagem: "MetodoDePagamento não encontrada" });
         }
@@ -42,18 +51,25 @@ export class MetodoDePagamentoController {
 
         metodoDePagamento.nome = nome;
         await metodoDePagamento.save();
-
+        console.log(metodoDePagamento)
         return res.status(200).json(metodoDePagamento);
     }
 
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
+        console.log('CHEGOU AQUI')
+        let metodoDePagamento: MetodoDePagamento = res.locals.metodosDePagamentos;
+        console.log(metodoDePagamento)
 
-        let cliente: MetodoDePagamento = res.locals.clientes;
-        cliente.situacao = "Inativo";
-        await cliente.save();
-
-        return res.status(200).json(cliente);
+        if (!metodoDePagamento) {
+            return res.status(400).json({ mensagem: "MetodoDePagamento não encontrada" });
+        }
+    
+        metodoDePagamento.situacao = "Inativo";
+        await metodoDePagamento.save();
+    
+        return res.status(200).json(metodoDePagamento);
     }
+    
 
 }

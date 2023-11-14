@@ -44,8 +44,9 @@ export class TipoServicoController {
 
     async delete(req: Request, res: Response): Promise<Response> {
         let body = req.body;
-        let tipoServico: TipoServico = res.locals.tipoServico;
-
+        let tipoServico: TipoServico = res.locals.tipoServico
+        console.log(res.locals.tipoServico)
+        console.log(tipoServico)
         if (!tipoServico) {
             return res.status(200).json({ mensagem: "Tipo de serviço não encontrado" })
         }

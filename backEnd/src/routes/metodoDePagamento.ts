@@ -18,7 +18,7 @@ async function validarPayload(req: Request, res: Response, next: NextFunction): 
         return next();
     } catch (error) {
         if (error instanceof yup.ValidationError) {
-            return res.status(400).json({ errors: error.errors });
+            return res.status(400).json({ errors: error.errors+"aki" });
         }
         return res.status(500).json({ error: 'Ops! Algo deu errado.' });
     }
@@ -26,27 +26,27 @@ async function validarPayload(req: Request, res: Response, next: NextFunction): 
 
 async function validar(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let id = Number(req.params.id);
+    console.log(id)
+    let metodosDePagamentos: MetodoDePagamento | null = await MetodoDePagamento.findOneBy({ id });
 
-    let MetodosDePagamentos: MetodoDePagamento | null = await MetodoDePagamento.findOneBy({ id });
-
-    if (!MetodosDePagamentos) {
-        return res.status(422).json({ error: "Servico não encontrado" });
+    if (!metodosDePagamentos) {
+        return res.status(422).json({ error: "Tipo de Pagamento Não encontrado" });
     }
-    res.locals.MetodosDePagamentos = MetodosDePagamentos;
-
+    res.locals.metodosDePagamentos = metodosDePagamentos;
+    console.log(metodosDePagamentos)
     return next();
 }
 
 let rotas: Router = Router();
 
-rotas.get("/MetodosDePagamentos", controller.list);
+rotas.get("/metodosDePagamentos", controller.list);
 
-rotas.get("/MetodosDePagamentos/:id", validar, controller.find);
+rotas.get("/metodosDePagamentos/:id", validar, controller.find);
 
-rotas.post("/MetodosDePagamentos", validarPayload, controller.create);
+rotas.post("/metodosDePagamentos", validarPayload, controller.create);
 
-rotas.put("/MetodosDePagamentos/:id", validar, validarPayload, controller.update);
+rotas.put("/metodosDePagamentos/:id", validar, validarPayload, controller.update);
 
-rotas.delete("/MetodosDePagamentos/:id", validar, controller.delete);
+rotas.delete("/metodosDePagamentos/:id", validar, controller.delete);
 
 export default rotas;

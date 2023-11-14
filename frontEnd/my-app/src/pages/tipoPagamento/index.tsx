@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { toast } from "react-toastify";
 import { Styles } from "react-modal";
-import { TypeForm } from "./paymentForm";
+import { PayForm } from "./paymentForm";
 
 export type Pay = {
   id: number;
@@ -40,11 +40,11 @@ export default function Payment() {
     const confirmDeletion = window.confirm(
       `Tem certeza que deseja excluir o mode de pagamento ${pay.nome}?`
     );
-
+      console.log(pay.id);
     if (confirmDeletion) {
       // Envia requisição para deletar o usuário
       axios
-        .delete<Pay>(`http://localhost:3000/MetodosDePagamentos/${pay.id}`)
+        .delete<Pay>(`http://localhost:3000/metodosDePagamentos/${pay.id}`)
         .then(() => {
           toast.success("Pagamento deletado com sucesso!"); // Exibe mensagem de sucesso
           // Atualiza o estado userList após a exclusão do usuário
@@ -65,7 +65,7 @@ export default function Payment() {
   // Função para fechar o modal de criação de usuário
   function closeCreatePayModal() {
     // Atualiza a lista de usuários após o fechamento do modal
-    axios.get<Pay[]>("http://localhost:3000/MetodosDePagamentos").then((response) => {
+    axios.get<Pay[]>("http://localhost:3000/metodosDePagamentos").then((response) => {
       setPayList(response.data);
     });
     setIsModalCreatePayOpen(false);
@@ -80,7 +80,7 @@ export default function Payment() {
   // Função para fechar o modal de edição de usuário
   function closeEditPayModal() {
     // Atualiza a lista de usuários após o fechamento do modal de edição
-    axios.get<Pay[]>("http://localhost:3000/MetodosDePagamentos").then((response) => {
+    axios.get<Pay[]>("http://localhost:3000/metodosDePagamentos").then((response) => {
       setPayList(response.data);
     });
     setIsModalEditPayOpen(false);
@@ -88,7 +88,7 @@ export default function Payment() {
 
   // Hook useEffect para carregar a lista de usuários ao carregar a página
   useEffect(() => {
-    axios.get<Pay[]>("http://localhost:3000/MetodosDePagamentos").then((response) => {
+    axios.get<Pay[]>("http://localhost:3000/metodosDePagamentos").then((response) => {
       setPayList(response.data);
     });
   }, []);
@@ -103,7 +103,7 @@ export default function Payment() {
         style={customModalStyles as Styles}
       >
         <h1>Criar Novo Tipo de Pagamento</h1>
-        <TypeForm closeModal={closeCreatePayModal} />
+        <PayForm closeModal={closeCreatePayModal} />
       </ModalContainer>
     );
   }, [isModalCreatePayOpen]);
@@ -118,7 +118,7 @@ export default function Payment() {
         style={customModalStyles as Styles}
       >
         <h1>Editar modo de pagamento</h1>
-        <TypeForm closeModal={closeEditPayModal} payData={pay} />
+        <PayForm closeModal={closeEditPayModal} payData={pay} />
       </ModalContainer>
     );
   }, [isModalEditPayOpen, pay]);
