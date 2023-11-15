@@ -3,13 +3,14 @@ import { Card, CardInfo } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { Button } from "@/components/button";
 import { Styles } from "react-modal";
 import { UserForm } from "./components/userForm";
 import { User } from "@/contexts/AuthContext";
-import { toast } from "react-toastify";
+import Loading from "@/components/Loading";
+import { DeleteModal } from "./components/deleteForm";
 
 // Estilos personalizados para os modais
 const customModalStyles = {
@@ -26,30 +27,19 @@ export default function Users() {
   const [userList, setUserList] = useState<User[]>([]); // Estado para armazenar a lista de usuários
   const [isModalCreateUserOpen, setIsModalCreateUserOpen] = useState(false); // Estado para controlar a abertura do modal de criação de usuário
   const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false); // Estado para controlar a abertura do modal de edição de usuário
+  const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
   const [user, setUser] = useState<User>(); // Estado para armazenar os dados de um usuário específico
+  const [loading, setLoading] = useState(false); // Estado para controlar o carregamento da página
 
-  // Função para lidar com a exclusão de um usuário
-  function handleDelete(user: User) {
-    // Exibe um prompt de confirmação antes de deletar o usuário
-    const confirmDeletion = window.confirm(
-      `Tem certeza que deseja excluir o usuário ${user.nome}?`
-    );
-
-    if (confirmDeletion) {
-      // Envia requisição para deletar o usuário
-      axios
-        .delete<User>(`http://localhost:3000/usuarios/${user.id}`)
-        .then(() => {
-          toast.success("Usuário deletado com sucesso"); // Exibe mensagem de sucesso
-          // Atualiza o estado userList após a exclusão do usuário
-          setUserList(userList.filter((u) => u.id !== user.id));
-        })
-        .catch((error) => {
-          toast.error("Erro ao deletar usuário"); // Exibe mensagem de erro
-          console.error("Erro ao excluir usuário: ", error);
-        });
-    }
-  }
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
+    await axios
+      .get<User[]>("http://localhost:3000/usuarios")
+      .then((response) => {
+        setUserList(response.data);
+      });
+    setLoading(false);
+  }, []);
 
   // Função para abrir o modal de criação de usuário
   function openCreateUserModal() {
@@ -57,13 +47,11 @@ export default function Users() {
   }
 
   // Função para fechar o modal de criação de usuário
-  function closeCreateUserModal() {
-    // Atualiza a lista de usuários após o fechamento do modal
-    axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
-      setUserList(response.data);
-    });
+  const closeCreateUserModal = useCallback(async () => {
     setIsModalCreateUserOpen(false);
-  }
+    await fetchUsers();
+  }, [fetchUsers]);
+  // Atualiza a lista de usuários após o fechamento do modal
 
   // Função para abrir o modal de edição de usuário
   function openEditUserModal(editUser: User) {
@@ -72,20 +60,26 @@ export default function Users() {
   }
 
   // Função para fechar o modal de edição de usuário
-  function closeEditUserModal() {
-    // Atualiza a lista de usuários após o fechamento do modal de edição
-    axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
-      setUserList(response.data);
-    });
+  const closeEditUserModal = useCallback(async () => {
     setIsModalEditUserOpen(false);
+    await fetchUsers();
+  }, [fetchUsers]);
+
+  function openDeleteUserModal(editUser: User) {
+    setUser(editUser);
+    setIsModalDeleteUserOpen(true);
   }
+
+  // Função para fechar o modal de edição de usuário
+  const closeDeleteUserModal = useCallback(async () => {
+    setIsModalDeleteUserOpen(false);
+    await fetchUsers();
+  }, [fetchUsers]);
 
   // Hook useEffect para carregar a lista de usuários ao carregar a página
   useEffect(() => {
-    axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
-      setUserList(response.data);
-    });
-  }, []);
+    fetchUsers();
+  }, [fetchUsers]);
 
   // Cria o modal de criação de usuário
   const createUserModal = useMemo(() => {
@@ -100,7 +94,7 @@ export default function Users() {
         <UserForm closeModal={closeCreateUserModal} />
       </ModalContainer>
     );
-  }, [isModalCreateUserOpen]);
+  }, [closeCreateUserModal, isModalCreateUserOpen]);
 
   // Cria o modal de edição de usuário
   const editUserModal = useMemo(() => {
@@ -115,7 +109,21 @@ export default function Users() {
         <UserForm closeModal={closeEditUserModal} userData={user} />
       </ModalContainer>
     );
-  }, [isModalEditUserOpen, user]);
+  }, [closeEditUserModal, isModalEditUserOpen, user]);
+
+  const deleteUserModal = useMemo(() => {
+    return (
+      <ModalContainer
+        isOpen={isModalDeleteUserOpen}
+        onRequestClose={closeDeleteUserModal}
+        contentLabel="Modal de deletar de Usuário"
+        style={customModalStyles as Styles}
+      >
+        <h1>Deletar Usuário</h1>
+        <DeleteModal closeModal={closeDeleteUserModal} userData={user}/>
+      </ModalContainer>
+    );
+  }, [closeDeleteUserModal, isModalDeleteUserOpen, user]);
 
   // Renderização do componente
   return (
@@ -123,26 +131,30 @@ export default function Users() {
       <Header label="Usuários" />
       <UserContainer>
         <Menu />
-        <ContentContainer>
-          <Button label="Criar usuário" onClick={openCreateUserModal} />
-          {userList.map((user) => {
-            return (
-              <Card
-                key={user.id}
-                openModal={() => openEditUserModal(user)}
-                onDelete={() => handleDelete(user)}
-              >
-                <CardInfo title="ID" data={user.id} />
-                <CardInfo title="Nome" data={user.nome} />
-                <CardInfo title="E-mail" data={user.email} />
-              </Card>
-            );
-          })}
-        </ContentContainer>
+        {loading ? (
+          <Loading />
+        ) : (
+          <ContentContainer>
+            <Button label= "Criar usuário" onClick={openCreateUserModal} />
+            {userList.map((user) => {
+              return (
+                <Card
+                  key={user.id}
+                  openModalEdit={() => openEditUserModal(user)}
+                  opemModalDelete={()=>openDeleteUserModal(user)}
+                >
+                  <CardInfo title="ID" data={user.id} />
+                  <CardInfo title="Nome" data={user.nome} />
+                  <CardInfo title="E-mail" data={user.email} />
+                </Card>
+              );
+            })}
+          </ContentContainer>
+        )}
       </UserContainer>
       {createUserModal}
       {editUserModal}
+      {deleteUserModal}
     </AuthGuard>
   );
 }
-

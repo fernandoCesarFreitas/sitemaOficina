@@ -9,20 +9,24 @@ import { Pencil, Trash } from "phosphor-react";
 
 interface CardProps {
   children: ReactNode;
-  openModal: MouseEventHandler<HTMLButtonElement>;
-  onDelete: MouseEventHandler<HTMLButtonElement>;
+  openModalEdit: MouseEventHandler<HTMLButtonElement>;
+  opemModalDelete: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function Card({ children, openModal, onDelete }: CardProps) {
+export function Card({ children, openModalEdit, opemModalDelete }: CardProps) {
   return (
     <DivContainer>
       <ContentContainer>
         {children}
         <ButtonsContainer>
-          <IconButton title="Editar" variant="primary" onClick={openModal}>
+          <IconButton title="Editar" variant="primary" onClick={openModalEdit}>
             {<Pencil size={24} />}
           </IconButton>
-          <IconButton title="Excluir" variant="danger" onClick={onDelete}>
+          <IconButton
+            title="Excluir"
+            variant="danger"
+            onClick={opemModalDelete}
+          >
             {<Trash size={24} />}
           </IconButton>
         </ButtonsContainer>

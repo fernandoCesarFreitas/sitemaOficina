@@ -8,6 +8,7 @@ import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/contexts/AuthContext";
+import { log } from "console";
 
 const newLoginValidationSchema = zod.object({
   email: zod
@@ -68,12 +69,14 @@ export default function Login() {
             id="email"
             type="email"
             error={errors?.email?.message}
+            data-cy="login-email"
           />
           <Input
             label="Senha"
             id="password"
             type="password"
             error={errors?.password?.message}
+            data-cy={"login-password"}
           />
 
           <Button label="Entrar" />

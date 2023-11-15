@@ -1,15 +1,9 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
-
-import {
-  ButtonContainer,
-  DivContainer,
-  ItemsFormContainer
-} from "./styles";
+import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
@@ -22,15 +16,22 @@ interface UserModalProps {
 }
 
 // Esquema de validação para os dados do novo usuário
-const newUserValidationSchema = zod.object({
-  nome: zod.string().min(1, "Informe um nome válido"),
-  email: zod.string().min(1, "Informe o seu email").email("Informe um e-mail válido"),
-  senha: zod.string().min(6, "A senha deve conter pelo menos 6 caracteres"),
-  password_confirm: zod.string().min(6, "A senha deve conter pelo menos 6 caracteres"),
-}).refine((data) => data.senha === data.password_confirm, {
-  message: "As senhas devem ser iguais",
-  path: ["password_confirm"],
-});
+const newUserValidationSchema = zod
+  .object({
+    nome: zod.string().min(1, "Informe um nome válido"),
+    email: zod
+      .string()
+      .min(1, "Informe o seu email")
+      .email("Informe um e-mail válido"),
+    senha: zod.string().min(6, "A senha deve conter pelo menos 6 caracteres"),
+    password_confirm: zod
+      .string()
+      .min(6, "A senha deve conter pelo menos 6 caracteres"),
+  })
+  .refine((data) => data.senha === data.password_confirm, {
+    message: "As senhas devem ser iguais",
+    path: ["password_confirm"],
+  });
 
 // Tipo dos dados do usuário baseado no esquema de validação
 type UserData = zod.infer<typeof newUserValidationSchema>;
@@ -89,13 +90,27 @@ export function UserForm({ closeModal, userData }: UserModalProps) {
             {/* Inputs do formulário com os respectivos erros */}
             <Input label="Nome" id="nome" error={errors.nome?.message} />
             <Input label="Email" id="email" error={errors.email?.message} />
-            <Input label="Senha" id="senha" type="password" error={errors.senha?.message} />
-            <Input label="Confirmar a Senha" id="password_confirm" type="password" error={errors.password_confirm?.message} />
+            <Input
+              label="Senha"
+              id="senha"
+              type="password"
+              error={errors.senha?.message}
+            />
+            <Input
+              label="Confirmar a Senha"
+              id="password_confirm"
+              type="password"
+              error={errors.password_confirm?.message}
+            />
           </ItemsFormContainer>
           <ButtonContainer>
             {/* Botões de enviar e cancelar */}
             <Button label="Enviar Dados" type="submit" />
-            <Button label="Cancelar" variant="danger" onClick={() => closeModal()} />
+            <Button
+              label="Cancelar"
+              variant="danger"
+              onClick={() => closeModal()}
+            />
           </ButtonContainer>
         </form>
       </DivContainer>
