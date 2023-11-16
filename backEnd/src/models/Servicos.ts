@@ -22,7 +22,7 @@ export class Servicos extends BaseEntity {
   @Column({ type: "timestamp", default: "now()", nullable: true })
   dataEntrada: string
 
-  @Column({ type: "timestamp", default: "now()", nullable: true })
+  @Column({ nullable: true })
   dataSaida: string
 
   @Column({ length: 255 })
@@ -37,6 +37,7 @@ export class Servicos extends BaseEntity {
   @Column({ nullable: true })
   observacoes: string;
 
+  @Column({ nullable: true })
   bicicleta_id: number;
 
   @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados,{ eager: true })

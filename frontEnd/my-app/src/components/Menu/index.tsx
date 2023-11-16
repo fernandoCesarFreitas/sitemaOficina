@@ -52,10 +52,10 @@ export function Menu() {
           <NavLink href="/itens">
             <Package size={32} alt="Itens"/>{/*itens*/}
           </NavLink>
-          <NavLink href="/tiposervico">
+          <NavLink href="/tipoServico">
             <GearSix size={32}alt="Tipo de Serviços" />{/*tipo de servicos*/}
           </NavLink>
-          <NavLink href="/relatorios">
+          <NavLink href="/financeiro">
             <ClipboardText size={32} alt="Relatórios" />{/*relatorios*/}
           </NavLink>
         </NavLinkContainer>

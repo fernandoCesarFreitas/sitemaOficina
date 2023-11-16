@@ -8,14 +8,18 @@ let controller: ServicosController = new ServicosController();
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
         descricao: yup.string().min(3).max(255).required(),
+        dataSaida: yup.mixed().nullable(),
         valor: yup.number().required(),
+        observacao: yup.string().nullable(),
         bicicletaId: yup.number().required(),
         tipoServicoId: yup.number().required(),
         clienteId: yup.number().required(),
+        financeiro_id: yup.mixed().nullable(),
         itensUtilizadosId: yup.number().required(),
     });
 
     let payload = req.body;
+    console.log(payload);
 
     try {
         req.body = await schema.validate(payload, { abortEarly: false, stripUnknown: true });

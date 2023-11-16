@@ -135,8 +135,8 @@ export default function Types() {
             return (
               <Card
                 key={type.id}
-                openModal={() => openEditTypeModal(type)}
-                onDelete={() => handleDelete(type)}
+                openModalEdit={() => openEditTypeModal(type)}
+                opemModalDelete={() => handleDelete(type)}
               >
                 <CardInfo title="ID" data={type.id} />
                 <CardInfo title="Descrição" data={type.descricao} />
