@@ -7,7 +7,6 @@ export class FinanceiroController {
         let body = req.body;
 
         let valor = body.valor;
-        let metodoDePagamento = body.metodoDePagamento;
         let status = "Ativo";
         let servicos: Servicos | null = await Servicos.findOneBy({ id: body.servicoId });
 
@@ -17,7 +16,6 @@ export class FinanceiroController {
         let financeiro: Financeiro = await Financeiro.create({
             status,
             valor,
-            metodoDePagamento,
             servicosRealizados: servicos
         }).save();
 
@@ -41,12 +39,10 @@ export class FinanceiroController {
 
         let data = body.data;
         let valor = body.valor;
-        let metodoDePagamento = body.metodoDePagamento;
         let status = "Ativo";
 
         financeiro.data = data;
         financeiro.valor = valor;
-        financeiro.metodoDePagamento = metodoDePagamento;
         financeiro.status = status;
         await financeiro.save();
 

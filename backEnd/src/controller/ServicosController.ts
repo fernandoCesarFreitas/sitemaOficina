@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { TipoServico } from "../models/TipoServico";
 import { Bicicleta } from "../models/Bicicletas";
 import { Clientes } from "../models/Clientes";
 import { Financeiro } from "../models/Financeiro";
@@ -18,21 +17,17 @@ export class ServicosController {
         let descricao = body.descricao;
         let status = "Ativo";
         let valor = body.valor;
-        let tipoServicoId = body.tipoServicoId;
         let bicicletaId = body.bicicletaId;
         let clienteId = body.clienteId;
         let itensUtilizadosId = body.itensUtilizadosId;
 
 
         //Buscando os relacionamentos
-        let tipoServico = await TipoServico.findOneBy({ id: tipoServicoId });
         let bicicleta = await Bicicleta.findOneBy({ id: bicicletaId });
         let cliente = await Clientes.findOneBy({ id: clienteId });
         let itens = await Itens.findOneBy({ id: itensUtilizadosId });
 
-        if (!tipoServico) {
-            return res.status(400).json({ mensagem: "Serviço não encontrado" })
-        }
+       
         if (!bicicleta) {
             return res.status(400).json({ mensagem: "Bicicleta não encontrada" })
         }
@@ -49,7 +44,6 @@ export class ServicosController {
             status: status,
             valor: valor,
             bicicleta: bicicleta,
-            tipoServico: tipoServico,
             cliente: cliente,
             itensUtilizados: itens,
         }).save()
@@ -89,15 +83,12 @@ export class ServicosController {
 
 
         //Buscando os relacionamentos
-        let tipoServico = await TipoServico.findOneBy({ id: tipoServicoId });
         let bicicleta = await Bicicleta.findOneBy({ id: bicicletaId });
         let cliente = await Clientes.findOneBy({ id: clienteId });
         // let financeiro = await Financeiro.findOneBy({ id: financeiroId });
         let itens = await Itens.findOneBy({ id: itensUtilizadosId });
 
-        if (!tipoServico || tipoServico.status == 'Inativo') {
-            return res.status(400).json({ mensagem: "Serviço não encontrado" })
-        }
+       
         if (!bicicleta || bicicleta.status == 'Inativo') {
             return res.status(400).json({ mensagem: "Bicicleta não encontrada" })
         }
@@ -116,7 +107,6 @@ export class ServicosController {
             servico.status = status,
             servico.valor = valor,
             servico.bicicleta = bicicleta,
-            servico.tipoServico = tipoServico,
             servico.cliente = cliente,
             // servico.financeiro = financeiro,
             servico.itensUtilizados = itens,

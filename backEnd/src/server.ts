@@ -7,9 +7,7 @@ import financeiroRoutes from './routes/financeiro'
 import itemRoutes from './routes/itens'
 import autenticacaoRoutes from './routes/autenticacao'
 import servicoRoutes from './routes/servicos'
-import tiposervicoRoutes from './routes/tipoServicos'
 import emailRoutes from './routes/email';
-import metodoDePagamentoRoutes from './routes/metodoDePagamento';
 import { basicAuth } from "./middlewares/basics-auth";
 
 let server: Express = express();
@@ -31,9 +29,7 @@ server.use(clientesRoutes);//basicAuth,
 server.use(financeiroRoutes);//basicAuth,
 server.use(itemRoutes);//basicAuth,
 server.use(servicoRoutes);//basicAuth,
-server.use(tiposervicoRoutes);//basicAuth,
 server.use(emailRoutes);//basicAuth,
-server.use(metodoDePagamentoRoutes);//basicAuth,
 
 //iniciar servidor
 export default {

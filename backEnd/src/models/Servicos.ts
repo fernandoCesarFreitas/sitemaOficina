@@ -9,7 +9,6 @@ import {
 } from "typeorm";
 
 import { Bicicleta } from "./Bicicletas";
-import { TipoServico } from "./TipoServico";
 import { Clientes } from "./Clientes";
 import { Financeiro } from "./Financeiro";
 import { Itens } from "./Itens";
@@ -37,18 +36,12 @@ export class Servicos extends BaseEntity {
   @Column({ nullable: true })
   observacoes: string;
 
-  @Column({ nullable: true })
   bicicleta_id: number;
 
   @ManyToOne(() => Bicicleta, bicicleta => bicicleta.servicosRealizados,{ eager: true })
   @JoinColumn({ name: "bicicleta_id" })
   bicicleta: Bicicleta;
 
-  tipo_servico_id: number;
-
-  @ManyToOne(() => TipoServico, tipoServico => tipoServico.servicos ,{ eager: true })
-  @JoinColumn({ name: "tipo_servico_id" })
-  tipoServico: TipoServico;
 
   cliente_id: number;
 
