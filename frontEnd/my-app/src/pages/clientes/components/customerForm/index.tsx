@@ -9,7 +9,7 @@ import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
-import { Customer } from "..";
+import { Customer } from "../..";
 
 // Definição das propriedades necessárias para o UserForm
 interface CustomerModalProps {

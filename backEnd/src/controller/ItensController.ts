@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Itens } from "../models/Itens";
 
 export class ItensController {
+
+
     async list(req: Request, res: Response): Promise<Response> {
         let nome = req.query.nome;
     
@@ -16,18 +18,16 @@ export class ItensController {
         let body = req.body;
 
         let nome = body.nome;
-        let descricao = body.descricao;
+        let marca = body.marca;
         let valor = body.valor;
         let quantidade = body.quantidade;
-        let maoDeObra = body.maoDeObra;
         let status = "Ativo";
 
         let item: Itens = await Itens.create({
             nome,
-            descricao,
+            marca,
             valor,
             quantidade,
-            maoDeObra,
             status,
         }).save();
 
@@ -40,17 +40,15 @@ export class ItensController {
         let itens: Itens = res.locals.itens;
 
         let nome = body.nome;
-        let descricao = body.descricao;
+        let marca = body.marca;
         let valor = body.valor;
         let quantidade = body.quantidade;
-        let maoDeObra = body.maoDeObra;
         let status = 'Ativo';
 
         itens.nome = nome;
-        itens.descricao = descricao;
+        itens.marca = marca;
         itens.valor = valor;
         itens.quantidade = quantidade;
-        itens.maoDeObra = maoDeObra;
         itens.status = status;
         await itens.save();
 

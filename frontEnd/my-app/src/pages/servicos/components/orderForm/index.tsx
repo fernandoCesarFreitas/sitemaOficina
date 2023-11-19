@@ -118,6 +118,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="valor"
               type="number"
               error={errors.valor?.message}
+              
             />
             <Input
               label="Observações"
@@ -132,13 +133,6 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="bicicletaId"
               error={errors.bicicletaId?.message}
             />
-            <Input
-              label="Id do tipo de serviço"
-              name="tipoServicoId"
-              id="tipoServicoId"
-              type="number"
-              error={errors.tipoServicoId?.message}
-            />
             {/* <Input
                 label="Id do cliente"
                 name="clienteId"
@@ -146,13 +140,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
                 type="number"
                 error={errors.clienteId?.message}
               /> */}
-            <Input
-              label="Id do financeiro"
-              name="financeiro_id"
-              id="financeiro_id"
-              type="number"
-              error={errors.financeiro_id?.message}
-            />
+            
             <Input
               label="Id do item de serviço"
               name="item_servico"

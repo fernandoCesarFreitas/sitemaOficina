@@ -1,4 +1,7 @@
+// Importa o componente de Autenticação
 import { AuthGuard } from "@/components/AuthGuard";
+
+// Importa os componentes relacionados à manipulação de usuários
 import { Card, CardInfo } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";
@@ -24,20 +27,26 @@ const customModalStyles = {
 
 // Componente principal Users
 export default function Users() {
-  const [userList, setUserList] = useState<User[]>([]); // Estado para armazenar a lista de usuários
-  const [isModalCreateUserOpen, setIsModalCreateUserOpen] = useState(false); // Estado para controlar a abertura do modal de criação de usuário
-  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false); // Estado para controlar a abertura do modal de edição de usuário
-  const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
-  const [user, setUser] = useState<User>(); // Estado para armazenar os dados de um usuário específico
-  const [loading, setLoading] = useState(false); // Estado para controlar o carregamento da página
+  // Estado para armazenar a lista de usuários
+  const [userList, setUserList] = useState<User[]>([]);
 
+  // Estados para controlar a abertura dos modais
+  const [isModalCreateUserOpen, setIsModalCreateUserOpen] = useState(false);
+  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
+  const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
+
+  // Estado para armazenar os dados de um usuário específico
+  const [user, setUser] = useState<User>();
+
+  // Estado para controlar o carregamento da página
+  const [loading, setLoading] = useState(false);
+
+  // Função assíncrona para buscar a lista de usuários
   const fetchUsers = useCallback(async () => {
     setLoading(true);
-    await axios
-      .get<User[]>("http://localhost:3000/usuarios")
-      .then((response) => {
-        setUserList(response.data);
-      });
+    await axios.get<User[]>("http://localhost:3000/usuarios").then((response) => {
+      setUserList(response.data);
+    });
     setLoading(false);
   }, []);
 
@@ -46,12 +55,11 @@ export default function Users() {
     setIsModalCreateUserOpen(true);
   }
 
-  // Função para fechar o modal de criação de usuário
+  // Função assíncrona para fechar o modal de criação de usuário e atualizar a lista de usuários
   const closeCreateUserModal = useCallback(async () => {
     setIsModalCreateUserOpen(false);
     await fetchUsers();
   }, [fetchUsers]);
-  // Atualiza a lista de usuários após o fechamento do modal
 
   // Função para abrir o modal de edição de usuário
   function openEditUserModal(editUser: User) {
@@ -59,18 +67,19 @@ export default function Users() {
     setIsModalEditUserOpen(true);
   }
 
-  // Função para fechar o modal de edição de usuário
+  // Função assíncrona para fechar o modal de edição de usuário e atualizar a lista de usuários
   const closeEditUserModal = useCallback(async () => {
     setIsModalEditUserOpen(false);
     await fetchUsers();
   }, [fetchUsers]);
 
+  // Função para abrir o modal de exclusão de usuário
   function openDeleteUserModal(editUser: User) {
     setUser(editUser);
     setIsModalDeleteUserOpen(true);
   }
 
-  // Função para fechar o modal de edição de usuário
+  // Função assíncrona para fechar o modal de exclusão de usuário e atualizar a lista de usuários
   const closeDeleteUserModal = useCallback(async () => {
     setIsModalDeleteUserOpen(false);
     await fetchUsers();
@@ -111,16 +120,17 @@ export default function Users() {
     );
   }, [closeEditUserModal, isModalEditUserOpen, user]);
 
+  // Cria o modal de exclusão de usuário
   const deleteUserModal = useMemo(() => {
     return (
       <ModalContainer
         isOpen={isModalDeleteUserOpen}
         onRequestClose={closeDeleteUserModal}
-        contentLabel="Modal de deletar de Usuário"
+        contentLabel="Modal de Deletar Usuário"
         style={customModalStyles as Styles}
       >
         <h1>Deletar Usuário</h1>
-        <DeleteModal closeModal={closeDeleteUserModal} userData={user}/>
+        <DeleteModal closeModal={closeDeleteUserModal} userData={user} />
       </ModalContainer>
     );
   }, [closeDeleteUserModal, isModalDeleteUserOpen, user]);
@@ -135,14 +145,19 @@ export default function Users() {
           <Loading />
         ) : (
           <ContentContainer>
-            <Button label= "Criar usuário" onClick={openCreateUserModal} />
+            {/* Botão para criar um novo usuário */}
+            <Button label="Criar usuário" onClick={openCreateUserModal} />
+            {/* Mapeia a lista de usuários e renderiza os cartões de usuário */}
             {userList.map((user) => {
               return (
                 <Card
                   key={user.id}
+                  // Função para abrir o modal de edição de usuário
                   openModalEdit={() => openEditUserModal(user)}
-                  opemModalDelete={()=>openDeleteUserModal(user)}
+                  // Função para abrir o modal de exclusão de usuário
+                  opemModalDelete={() => openDeleteUserModal(user)}
                 >
+                  {/* Informações do usuário exibidas no cartão */}
                   <CardInfo title="ID" data={user.id} />
                   <CardInfo title="Nome" data={user.nome} />
                   <CardInfo title="E-mail" data={user.email} />
@@ -152,6 +167,7 @@ export default function Users() {
           </ContentContainer>
         )}
       </UserContainer>
+      {/* Renderiza os modais */}
       {createUserModal}
       {editUserModal}
       {deleteUserModal}

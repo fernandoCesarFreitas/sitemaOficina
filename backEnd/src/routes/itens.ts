@@ -8,10 +8,9 @@ let controller: ItensController = new ItensController();
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
         nome: yup.string().min(3).max(255).required(),
-        descricao: yup.string().min(3).max(255).required(),
+        marca: yup.string().min(3).max(255).required(),
         valor: yup.number().typeError('O campo valor deve ser um número.').required('O valor é obrigatório'),
         quantidade: yup.number().required(''),
-        maoDeObra: yup.string().min(3).max(255),
     });
 
     let payload = req.body;

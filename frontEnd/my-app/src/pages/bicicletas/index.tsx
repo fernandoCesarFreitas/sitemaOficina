@@ -5,11 +5,13 @@ import { Card, CardInfo } from "@/components/Card";
 import { Menu } from "@/components/Menu";
 import { User } from "@/contexts/AuthContext";
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback ,useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { toast } from "react-toastify";
 import { Styles } from "react-modal";
-import { BikeForm } from "./bikeForm";
+import { BikeForm } from "./components/bikeForm";
+import { DeleteModal } from "./components/deleteForm";
+import Loading from "@/components/Loading";
 
 export type Bike = {
   id: number;
@@ -20,6 +22,7 @@ export type Bike = {
 };
 
 
+// Estilos personalizados para os modais
 const customModalStyles = {
   content: {
     position: "absolute",
@@ -29,49 +32,41 @@ const customModalStyles = {
   },
 };
 
-// Componente principal bikes
+// Componente principal Users
 export default function Bike() {
-  const [bikeList, setBikeList] = useState<Bike[]>([]); // Estado para armazenar a lista de bikes
-  const [isModalCreateBikeOpen, setIsModalCreateBikeOpen] = useState(false); // Estado para controlar a abertura do modal de criação de usuário
-  const [isModalEditBikeOpen, setIsModalEditBikeOpen] = useState(false); // Estado para controlar a abertura do modal de edição de usuário
-  const [bike, setBike] = useState<Bike>(); // Estado para armazenar os dados de um usuário específico
+  // Estado para armazenar a lista de usuários
+  const [bikeList, setBikeList] = useState<Bike[]>([]);
 
-  // Função para lidar com a exclusão de um usuário
-  function handleDelete(bike: Bike) {
-    // Exibe um prompt de confirmação antes de deletar o usuário
-    const confirmDeletion = window.confirm(
-      `Tem certeza que deseja excluir a BIcicleta ${bike.modelo}?`
-    );
+  // Estados para controlar a abertura dos modais
+  const [isModalCreateBikeOpen, setIsModalCreateBikeOpen] = useState(false);
+  const [isModalEditBikeOpen, setIsModalEditBikeOpen] = useState(false);
+  const [isModalDeleteBikeOpen, setIsModalDeleteBikeOpen] = useState(false);
 
-    if (confirmDeletion) {
-      // Envia requisição para deletar o usuário
-      axios
-        .delete<Bike>(`http://localhost:3000/bicicletas/${bike.id}`)
-        .then(() => {
-          toast.success("bicicleta deletada com sucesso"); // Exibe mensagem de sucesso
-          // Atualiza o estado userList após a exclusão do usuário
-          setBikeList(bikeList.filter((u) => u.id !== bike.id));
-        })
-        .catch((error) => {
-          toast.error("Erro ao deletar Bicicleta"); // Exibe mensagem de erro
-          console.error("Erro ao excluir Bicicleta: ", error);
-        });
-    }
-  }
+  // Estado para armazenar os dados de um usuário específico
+  const [bike, setBike] = useState<Bike>();
+
+  // Estado para controlar o carregamento da página
+  const [loading, setLoading] = useState(false);
+
+  // Função assíncrona para buscar a lista de usuários
+  const fetchBike = useCallback(async () => {
+    setLoading(true);
+    await axios.get<Bike[]>("http://localhost:3000/bicicletas").then((response) => {
+      setBikeList(response.data);
+    });
+    setLoading(false);
+  }, []);
 
   // Função para abrir o modal de criação de usuário
   function openCreateBikeModal() {
     setIsModalCreateBikeOpen(true);
   }
 
-  // Função para fechar o modal de criação de usuário
-  function closeCreateBikeModal() {
-    // Atualiza a lista de usuários após o fechamento do modal
-    axios.get<Bike[]>("http://localhost:3000/bicicletas").then((response) => {
-      setBikeList(response.data);
-    });
+  // Função assíncrona para fechar o modal de criação de usuário e atualizar a lista de usuários
+  const closeCreateBikeModal = useCallback(async () => {
     setIsModalCreateBikeOpen(false);
-  }
+    await fetchBike();
+  }, [fetchBike]);
 
   // Função para abrir o modal de edição de usuário
   function openEditBikeModal(editBike: Bike) {
@@ -79,21 +74,28 @@ export default function Bike() {
     setIsModalEditBikeOpen(true);
   }
 
-  // Função para fechar o modal de edição de usuário
-  function closeEditBikeModal() {
-    // Atualiza a lista de usuários após o fechamento do modal de edição
-    axios.get<Bike[]>("http://localhost:3000/bicicletas").then((response) => {
-      setBikeList(response.data);
-    });
+  // Função assíncrona para fechar o modal de edição de usuário e atualizar a lista de usuários
+  const closeEditBikeModal = useCallback(async () => {
     setIsModalEditBikeOpen(false);
+    await fetchBike();
+  }, [fetchBike]);
+
+  // Função para abrir o modal de exclusão de usuário
+  function openDeleteBikeModal(editBike: Bike) {
+    setBike(editBike);
+    setIsModalDeleteBikeOpen(true);
   }
+
+  // Função assíncrona para fechar o modal de exclusão de usuário e atualizar a lista de usuários
+  const closeDeleteBikeModal = useCallback(async () => {
+    setIsModalDeleteBikeOpen(false);
+    await fetchBike();
+  }, [fetchBike]);
 
   // Hook useEffect para carregar a lista de usuários ao carregar a página
   useEffect(() => {
-    axios.get<Bike[]>("http://localhost:3000/bicicletas").then((response) => {
-      setBikeList(response.data);
-    });
-  }, []);
+    fetchBike();
+  }, [fetchBike]);
 
   // Cria o modal de criação de usuário
   const createBikeModal = useMemo(() => {
@@ -104,11 +106,11 @@ export default function Bike() {
         contentLabel="Modal de Criação de Bicicletas"
         style={customModalStyles as Styles}
       >
-        <h1>Criar Novo Bicicleta</h1>
+        <h1>Criar Nova Bicicleta</h1>
         <BikeForm closeModal={closeCreateBikeModal} />
       </ModalContainer>
     );
-  }, [isModalCreateBikeOpen]);
+  }, [closeCreateBikeModal, isModalCreateBikeOpen]);
 
   // Cria o modal de edição de usuário
   const editBikeModal = useMemo(() => {
@@ -116,14 +118,29 @@ export default function Bike() {
       <ModalContainer
         isOpen={isModalEditBikeOpen}
         onRequestClose={closeEditBikeModal}
-        contentLabel="Modal de Edição de Bicicletas"
+        contentLabel="Modal de Edição de bicicletas"
         style={customModalStyles as Styles}
       >
         <h1>Editar Bicicleta</h1>
         <BikeForm closeModal={closeEditBikeModal} bikeData={bike} />
       </ModalContainer>
     );
-  }, [isModalEditBikeOpen, bike]);
+  }, [closeEditBikeModal, isModalEditBikeOpen, bike]);
+
+  // Cria o modal de exclusão de usuário
+  const deleteBikeModal = useMemo(() => {
+    return (
+      <ModalContainer
+        isOpen={isModalDeleteBikeOpen}
+        onRequestClose={closeDeleteBikeModal}
+        contentLabel="Modal de Deletar bicicletas"
+        style={customModalStyles as Styles}
+      >
+        <h1>Deletar Bicicleta</h1>
+        <DeleteModal closeModal={closeDeleteBikeModal} bikeData={bike} />
+      </ModalContainer>
+    );
+  }, [closeDeleteBikeModal, isModalDeleteBikeOpen, bike]);
 
   // Renderização do componente
   return (
@@ -131,27 +148,37 @@ export default function Bike() {
       <Header label="Bicicletas" />
       <UserContainer>
         <Menu />
-        <ContentContainer>
-          <Button label="Criar Bicicletas" onClick={openCreateBikeModal} />
-          {bikeList.map((bike) => {
-            return (
-              <Card
-                key={bike.id}
-                openModal={() => openEditBikeModal(bike)}
-                onDelete={() => handleDelete(bike)}
-              >
-                <CardInfo title="ID" data={bike.id} />
-                <CardInfo title="Modelo" data={bike.modelo} />
-                <CardInfo title="Tipo" data={bike.tipo} />
-                <CardInfo title="Cor" data={bike.cor} />
-              </Card>
-            );
-          })}
-        </ContentContainer>
+        {loading ? (
+          <Loading />
+        ) : (
+          <ContentContainer>
+            {/* Botão para criar um novo usuário */}
+            <Button label="Criar Bicicleta" onClick={openCreateBikeModal} />
+            {/* Mapeia a lista de usuários e renderiza os cartões de usuário */}
+            {bikeList.map((bike) => {
+              return (
+                <Card
+                  key={bike.id}
+                  // Função para abrir o modal de edição de usuário
+                  openModalEdit={() => openEditBikeModal(bike)}
+                  // Função para abrir o modal de exclusão de usuário
+                  opemModalDelete={() => openDeleteBikeModal(bike)}
+                >
+                  {/* Informações do usuário exibidas no cartão */}
+                  <CardInfo title="ID" data={bike.id} />
+                  <CardInfo title="Modelo" data={bike.modelo} />
+                  <CardInfo title="Tipo" data={bike.tipo} />
+                  <CardInfo title="Cor" data={bike.cor} />
+                </Card>
+              );
+            })}
+          </ContentContainer>
+        )}
       </UserContainer>
+      {/* Renderiza os modais */}
       {createBikeModal}
       {editBikeModal}
+      {deleteBikeModal}
     </AuthGuard>
   );
 }
-

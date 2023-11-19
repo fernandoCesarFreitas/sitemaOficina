@@ -24,10 +24,9 @@ interface ItemModalProps {
 // Esquema de validação para os dados do novo usuário
 const newUserValidationSchema = zod.object({
   nome: zod.string().min(1, "Informe um nome válido"),
-  descricao: zod.string().min(1, "Informe uma descrição"),
+  marca: zod.string().min(1, "Informe uma marca válida"),
   valor: zod.string().min(0, "Informe um valor válido"),
   quantidade: zod.string().min(1, "Informe uma quantidade válida"),
-  maoDeObra: zod.string().min(0, "Informe uma mão de obra válida"),
 });
 
 // Tipo dos dados do usuário baseado no esquema de validação
@@ -40,10 +39,9 @@ export function ItemForm({ closeModal, itemData }: ItemModalProps) {
     resolver: zodResolver(newUserValidationSchema),
     defaultValues: {
       nome: "",
-      descricao: "",
+      marca: "",
       valor: "",
       quantidade: "",
-      maoDeObra: "",
     },
   });
 
@@ -57,10 +55,9 @@ export function ItemForm({ closeModal, itemData }: ItemModalProps) {
   useEffect(() => {
     if (itemData) {
       setValue("nome", itemData.nome);
-      setValue("descricao", itemData.descricao);
+      setValue("marca", itemData.marca);
       setValue("valor", itemData.valor);
       setValue("quantidade", itemData.quantidade);
-      setValue("maoDeObra", itemData.maoDeObra);
     }
   }, [setValue, itemData]);
  
@@ -93,10 +90,9 @@ export function ItemForm({ closeModal, itemData }: ItemModalProps) {
           <ItemsFormContainer>
             {/* Inputs do formulário com os respectivos erros */}
             <Input label="Nome" id="nome" error={errors.nome?.message} />
-            <Input label="Descrição" id="descricao" error={errors.descricao?.message} />
+            <Input label="marca" id="marca" error={errors.marca?.message} />
             <Input label="Valor" id="valor"  error={errors.valor?.message} />
             <Input label="Quantidade" id="quantidade"  error={errors.quantidade?.message} />
-            <Input label="Mão de Obra" id="maoDeObra"  error={errors.maoDeObra?.message} />
           </ItemsFormContainer>
           <ButtonContainer>
             {/* Botões de enviar e cancelar */}

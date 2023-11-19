@@ -3,7 +3,6 @@
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  ManyToOne,
   OneToMany,
 } from "typeorm";
 import { Servicos } from "./Servicos";
@@ -20,17 +19,14 @@ export class Itens extends BaseEntity {
   nome: string;
 
   @Column({ length: 255 })
-  descricao: string;
+  marca: string;
+
 
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
   @Column({})
   quantidade: number;
-
-  @Column({ length: 255 })
-  maoDeObra: string;
-
 
 
   @OneToMany(() => Servicos, servico => servico.itensUtilizados)
