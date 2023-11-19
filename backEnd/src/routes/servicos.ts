@@ -12,10 +12,8 @@ async function validarPayload(req: Request, res: Response, next: NextFunction): 
         valor: yup.number().required(),
         observacao: yup.string().nullable(),
         bicicletaId: yup.number().required(),
-        tipoServicoId: yup.number().required(),
-        clienteId: yup.number().required(),
-        financeiro_id: yup.mixed().nullable(),
         itensUtilizadosId: yup.number().required(),
+        clienteId: yup.number().required(),
     });
 
     let payload = req.body;

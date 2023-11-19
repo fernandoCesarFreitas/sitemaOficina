@@ -1,7 +1,9 @@
 // InputSelect.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Customer } from '@/pages/clientes';
+import { Bike } from '@/pages/bicicletas';
+import { StyledSelect } from './styles';
+
 
 interface InputSelectProps {
   label: string;
@@ -10,9 +12,9 @@ interface InputSelectProps {
   width?: number;
   error?: string;
   // Adicione a propriedade clienteId
-  clienteId?: string;
+  bikeId?: string;
   // Adicione a função para lidar com a mudança do cliente
-  onClienteChange?: (clienteId: string) => void;
+  onBikeChange?: (bikeId: string) => void;
 }
 
 const InputSelect: React.FC<InputSelectProps> = ({
@@ -21,16 +23,16 @@ const InputSelect: React.FC<InputSelectProps> = ({
   placeholder,
   width,
   error,
-  clienteId, // Adicione clienteId à desestruturação
-  onClienteChange, // Adicione onClienteChange à desestruturação
+  bikeId, // Adicione clienteId à desestruturação
+  onBikeChange, // Adicione onClienteChange à desestruturação
 }) => {
-  const [options, setOptions] = useState<Customer[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string | null>(clienteId || '');
+  const [options, setOptions] = useState<Bike[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string | null>(bikeId || '');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<Customer[]>("http://localhost:3000/clientes");
+        const response = await axios.get<Bike[]>("http://localhost:3000/bicicletas");
         setOptions(response.data);
       } catch (error) {
         console.error('Erro ao buscar dados da API:', error);
@@ -44,28 +46,28 @@ const InputSelect: React.FC<InputSelectProps> = ({
     const selectedId = e.target.value;
     setSelectedOption(selectedId);
     // Chame a função de mudança do cliente, se existir
-    if (onClienteChange) {
-      onClienteChange(selectedId);
+    if (onBikeChange) {
+      onBikeChange(selectedId);
     }
   };
 
   return (
     <div>
       <label htmlFor={id}>{label}</label>
-      <select
+      <StyledSelect
         value={selectedOption || ''} 
         onChange={handleSelectChange}
-        style={{ width }}
+        width={300}
       >
         <option value="" disabled>
           Selecione uma opção
         </option>
         {options.map((option) => (
           <option key={option.id} value={option.id}>
-            {option.nome}
+            {option.modelo}
           </option>
         ))}
-      </select>
+      </StyledSelect>
       {error && <span>{error}</span>}
     </div>
   );

@@ -6,9 +6,11 @@ import * as zod from "zod";
 import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/input";
-import InputSelect from "../inputSelect";
+import InputSelect from "../inputSelectCustomer";
 import { Button } from "@/components/button";
 import { Order } from "../..";
+import InputSelectItem from "../inputSelectItem";
+import InputSelectBike from "../inputSelectBike";
 
 // Definição das propriedades necessárias para o UserForm
 interface OrderModalProps {
@@ -23,9 +25,7 @@ const newUserValidationSchema = zod.object({
   valor: zod.string().min(1, "Informe um valor válido"),
   observacoes: zod.string().nullable(),
   bicicletaId: zod.string().min(1, "Informe um id válido"),
-  tipoServicoId: zod.string().min(1, "Informe um id válido"),
   clienteId: zod.string().min(1, "Informe um id válido"),
-  financeiro_id: zod.string().nullable(),
   itensUtilizadosId: zod.string(),
 });
 
@@ -44,9 +44,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
       valor: "",
       observacoes: "",
       bicicletaId: "",
-      tipoServicoId: "",
       clienteId: "",
-      financeiro_id: "",
       itensUtilizadosId: "",
     },
   });
@@ -66,10 +64,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
       setValue("valor", orderData.valor);
       setValue("observacoes", orderData.observacoes);
       setValue("bicicletaId", orderData.bicicleta.id.toString());
-      setValue("tipoServicoId", orderData.tipoServico.id.toString());
       setValue("clienteId", orderData.cliente.id.toString());
-      setValue("financeiro_id", orderData.financeiro_id);
-      console.log(orderData.itensUtilizados.descricao);
       setValue("itensUtilizadosId", orderData.itensUtilizados.id.toString());
     }
   }, [setValue, orderData]);
@@ -118,7 +113,6 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="valor"
               type="number"
               error={errors.valor?.message}
-              
             />
             <Input
               label="Observações"
@@ -126,28 +120,24 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="observacoes"
               error={errors.observacoes?.message}
             />
-            <Input
-              label="Id da bicicleta"
-              name="bicicleta_id"
-              type="number"
-              id="bicicletaId"
-              error={errors.bicicletaId?.message}
+            <InputSelectBike
+            label="Bicicleta"
+            id="bicicletaId"
+            bikeId={methods.watch("bicicletaId")} // Certifique-se de passar o bicicletaId do watch
+            onBikeChange={(bikeId) =>
+              methods.setValue("bicicletaId", bikeId)
+            }
             />
-            {/* <Input
-                label="Id do cliente"
-                name="clienteId"
-                id="clienteId"
-                type="number"
-                error={errors.clienteId?.message}
-              /> */}
-            
-            <Input
-              label="Id do item de serviço"
-              name="item_servico"
+            <InputSelectItem
+              label="Item"
               id="itensUtilizadosId"
-              type="number"
+              itemId={methods.watch("itensUtilizadosId")} // Certifique-se de passar o clienteId do watch
+              onItemChange={(itemId) =>
+                methods.setValue("itensUtilizadosId", itemId)
+              }
               error={errors.itensUtilizadosId?.message}
             />
+
             <InputSelect
               label="Cliente"
               id="clienteId"

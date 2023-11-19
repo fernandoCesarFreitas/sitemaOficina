@@ -12,7 +12,6 @@ import Loading from "@/components/Loading";
 import { DeleteModal } from "./components/deleteForm";
 import { Bike } from "../bicicletas";
 import { Customer } from "../clientes";
-import { Tipo } from "../tipoServico";
 import { Item } from "../itens";
 
 export type Order = {
@@ -24,13 +23,11 @@ export type Order = {
   valor: string;
   observacoes: string;//pode ser null
   bicicleta_id: string;
-  tipoServicoId: string;
   clienteId: string;
   financeiro_id: string;
   itensUtilizadosId: string;
   bicicleta: Bike;
   cliente: Customer;
-  tipoServico: Tipo;
   itensUtilizados: Item;
 };
 
@@ -170,7 +167,7 @@ export default function Os() {
                   <CardInfo title="ID" data={os.id} />
                   <CardInfo title="Entrada" data={os.dataEntrada} />
                   <CardInfo title="Saída" data={os.dataSaida} />
-                  <CardInfo title="Cliente" data={os.clienteId} />
+                  <CardInfo title="Cliente" data={os.cliente.nome} />
                 </Card>
               );
             })}

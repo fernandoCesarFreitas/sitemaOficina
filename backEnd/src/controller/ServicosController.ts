@@ -11,9 +11,11 @@ let email: EmailController = new EmailController();
 //adicionar campo obsservacoes
 
 export class ServicosController {
+
+
     async create(req: Request, res: Response): Promise<Response> {
         let body = req.body;
-
+        console.log(body);
         let descricao = body.descricao;
         let status = "Ativo";
         let valor = body.valor;

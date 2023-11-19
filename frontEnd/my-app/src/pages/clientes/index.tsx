@@ -147,7 +147,7 @@ export default function Customers() {
   // Renderização do componente
   return (
     <AuthGuard>
-      <Header label="Usuários" />
+      <Header label="Clientes" />
       <UserContainer>
         <Menu />
         {loading ? (

@@ -145,7 +145,7 @@ export default function Item() {
   // Renderização do componente
   return (
     <AuthGuard>
-      <Header label="Usuários" />
+      <Header label="Itens" />
       <UserContainer>
         <Menu />
         {loading ? (
