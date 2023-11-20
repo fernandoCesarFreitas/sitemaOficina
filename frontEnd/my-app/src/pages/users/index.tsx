@@ -1,7 +1,5 @@
 // Importa o componente de Autenticação
 import { AuthGuard } from "@/components/AuthGuard";
-
-// Importa os componentes relacionados à manipulação de usuários
 import { Card, CardInfo } from "@/components/Card";
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";

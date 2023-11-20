@@ -6,7 +6,7 @@ import * as zod from "zod";
 import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/input";
-import InputSelect from "../inputSelectCustomer";
+import InputSelect from "../inputSelect";
 import { Button } from "@/components/button";
 import { Order } from "../..";
 import InputSelectItem from "../inputSelectItem";
@@ -123,7 +123,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
             <InputSelectBike
             label="Bicicleta"
             id="bicicletaId"
-            bikeId={methods.watch("bicicletaId")} // Certifique-se de passar o bicicletaId do watch
+            bikeId={methods.watch("bicicletaId")}
             onBikeChange={(bikeId) =>
               methods.setValue("bicicletaId", bikeId)
             }
@@ -131,7 +131,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
             <InputSelectItem
               label="Item"
               id="itensUtilizadosId"
-              itemId={methods.watch("itensUtilizadosId")} // Certifique-se de passar o clienteId do watch
+              itemId={methods.watch("itensUtilizadosId")} 
               onItemChange={(itemId) =>
                 methods.setValue("itensUtilizadosId", itemId)
               }
@@ -141,10 +141,10 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
             <InputSelect
               label="Cliente"
               id="clienteId"
-              clienteId={methods.watch("clienteId")} // Certifique-se de passar o clienteId do watch
+              clienteId={methods.watch("clienteId")} 
               onClienteChange={(clienteId) =>
                 methods.setValue("clienteId", clienteId)
-              } // Atualize o valor do clienteId no formulário
+              } 
             />
           </ItemsFormContainer>
           <ButtonContainer>

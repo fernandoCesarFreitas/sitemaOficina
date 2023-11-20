@@ -1,5 +1,5 @@
 import { AuthGuard } from "@/components/AuthGuard";
-import { Card, CardInfo } from "@/components/Card";
+import { Card, CardInfo } from "./components/card";
 import { Header } from "@/components/Header";
 import { Menu } from "@/components/Menu";
 import axios from "axios";
@@ -13,15 +13,16 @@ import { DeleteModal } from "./components/deleteForm";
 import { Bike } from "../bicicletas";
 import { Customer } from "../clientes";
 import { Item } from "../itens";
+import { format } from 'date-fns';
 
 export type Order = {
   id: number;
   dataEntrada: string;
-  dataSaida: string;//pode ser null
+  dataSaida: string; //pode ser null
   descricao: string;
   status: string;
   valor: string;
-  observacoes: string;//pode ser null
+  observacoes: string; //pode ser null
   bicicleta_id: string;
   clienteId: string;
   financeiro_id: string;
@@ -47,6 +48,7 @@ export default function Os() {
   const [isModalCreateOsOpen, setIsModalCreateOsOpen] = useState(false); // Estado para controlar a abertura do modal de criação de usuário
   const [isModalEditOsOpen, setIsModalEditOsOpen] = useState(false); // Estado para controlar a abertura do modal de edição de usuário
   const [isModalDeleteOsOpen, setIsModalDeleteOsOpen] = useState(false);
+  const [isModalConcluidoOsOpen, setIsModalConcluidoOsOpen] = useState(false);
   const [os, setOs] = useState<Order>(); // Estado para armazenar os dados de um usuário específico
   const [loading, setLoading] = useState(false); // Estado para controlar o carregamento da página
 
@@ -84,8 +86,6 @@ export default function Os() {
     await fetchOrder();
   }, [fetchOrder]);
 
-
-
   function openDeleteOsModal(editOrder: Order) {
     setOs(editOrder);
     setIsModalDeleteOsOpen(true);
@@ -94,6 +94,18 @@ export default function Os() {
   // Função para fechar o modal de edição de usuário
   const closeDeleteOsModal = useCallback(async () => {
     setIsModalDeleteOsOpen(false);
+    await fetchOrder();
+  }, [fetchOrder]);
+
+  function openConcluidoOsModal(editOrder: Order) {
+    console.log(editOrder);
+    setOs(editOrder);
+    setIsModalConcluidoOsOpen(true);
+  }
+
+  // Função para fechar o modal de edição de usuário
+  const closeConcluidoOsModal = useCallback(async () => {
+    setIsModalConcluidoOsOpen(false);
     await fetchOrder();
   }, [fetchOrder]);
 
@@ -141,12 +153,28 @@ export default function Os() {
         style={customModalStyles as Styles}
       >
         <h1>Deletar Ordem de Serviço</h1>
-        <DeleteModal closeModal={closeDeleteOsModal} orderData={os}/>
+        <DeleteModal closeModal={closeDeleteOsModal} orderData={os} />
       </ModalContainer>
     );
   }, [closeDeleteOsModal, isModalDeleteOsOpen, os]);
 
-  // Renderização do componente
+  const handleConcluidoClick = async (order: Order) => {
+    console.log(order);
+    try {
+      await axios.delete(`http://localhost:3000/servicos/${order.id}`);
+      await fetchOrder(); // Atualiza a lista após a conclusão
+    } catch (error) {
+      console.error("Erro ao marcar como concluído:", error);
+    }
+  };
+  const formatarData = (data : string) => {
+    const dataObj = new Date(data);
+    const dia = dataObj.getDate().toString().padStart(2, '0');
+    const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+    const ano = dataObj.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
   return (
     <AuthGuard>
       <Header label="Ordem de Serviço" />
@@ -156,16 +184,18 @@ export default function Os() {
           <Loading />
         ) : (
           <ContentContainer>
-            <Button label= "Criar Serviço" onClick={openCreateOsModal} />
+            <Button label="Criar Serviço" onClick={openCreateOsModal} />
             {osList.map((os) => {
               return (
                 <Card
                   key={os.id}
                   openModalEdit={() => openEditOsModal(os)}
-                  opemModalDelete={()=>openDeleteOsModal(os)}
+                  openModalDelete={() => openDeleteOsModal(os)}
+                  markAsConcluido={() => openConcluidoOsModal(os)}
+                  orderData={os}
                 >
                   <CardInfo title="ID" data={os.id} />
-                  <CardInfo title="Entrada" data={os.dataEntrada} />
+                  <CardInfo title="Entrada" data={formatarData(os.dataEntrada)} />
                   <CardInfo title="Saída" data={os.dataSaida} />
                   <CardInfo title="Cliente" data={os.cliente.nome} />
                 </Card>

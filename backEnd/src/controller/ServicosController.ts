@@ -4,6 +4,7 @@ import { Clientes } from "../models/Clientes";
 import { Financeiro } from "../models/Financeiro";
 import { Servicos } from "../models/Servicos";
 import { Itens } from "../models/Itens";
+import { format } from 'date-fns';
 
 import { EmailController } from "./EmailController"
 
@@ -110,7 +111,6 @@ export class ServicosController {
             servico.valor = valor,
             servico.bicicleta = bicicleta,
             servico.cliente = cliente,
-            // servico.financeiro = financeiro,
             servico.itensUtilizados = itens,
             await servico.save()
 
@@ -126,9 +126,13 @@ export class ServicosController {
         if (!servico) {
             return res.status(400).json({ mensagem: "Serviço não encontrado" })
         }
+        const dataAtual = new Date();
+        const dataFormatada = format(dataAtual, 'dd/MM/yyyy');
 
         servico.status = 'Concluído'
 
+        servico.dataSaida = dataFormatada;
+        console.log(servico.dataSaida);
         await servico.save()
         let cliente = servico.cliente;
         let titulo = "Sua Bicicleta está pronta, Oficina do seu João agradece sua preferência";
