@@ -8,8 +8,7 @@ import { ContentContainer, ModalContainer, UserContainer } from "./styles";
 import { Button } from "@/components/button";
 import { Styles } from "react-modal";
 import { ItemForm } from "./components/userForm";
-import { User } from "@/contexts/AuthContext";
-import { toast } from "react-toastify";
+import FileSaver from "file-saver";
 import { DeleteModal } from "./components/deleteForm";
 import Loading from "@/components/Loading";
 
@@ -142,6 +141,21 @@ export default function Item() {
     );
   }, [closeDeleteItemModal, isModalDeleteItemOpen, item]);
 
+  function gerarCSV() {
+    axios
+      .get("http://localhost:3000/itenscsv", { responseType: "blob" })
+      .then((response) => {
+        // Cria um blob com os dados recebidos
+        const blob = new Blob([response.data], { type: "text/csv" });
+  
+        // Utiliza o FileSaver para salvar o arquivo
+        FileSaver.saveAs(blob, "itens.csv");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   // Renderização do componente
   return (
     <AuthGuard>
@@ -153,6 +167,7 @@ export default function Item() {
         ) : (
           <ContentContainer>
             {/* Botão para criar um novo usuário */}
+            <Button  label="gerar CSV" onClick={gerarCSV}/>
             <Button label="Criar Item" onClick={openCreateItemModal} />
             {/* Mapeia a lista de usuários e renderiza os cartões de usuário */}
             {itemList.map((item) => {

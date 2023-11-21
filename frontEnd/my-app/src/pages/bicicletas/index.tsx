@@ -7,7 +7,7 @@ import { User } from "@/contexts/AuthContext";
 import axios from "axios";
 import { useCallback ,useEffect, useMemo, useState } from "react";
 import { ContentContainer, ModalContainer, UserContainer } from "./styles";
-import { toast } from "react-toastify";
+import FileSaver from "file-saver";
 import { Styles } from "react-modal";
 import { BikeForm } from "./components/bikeForm";
 import { DeleteModal } from "./components/deleteForm";
@@ -142,6 +142,21 @@ export default function Bike() {
     );
   }, [closeDeleteBikeModal, isModalDeleteBikeOpen, bike]);
 
+  function gerarCSV() {
+    axios
+      .get("http://localhost:3000/bicicletascsv", { responseType: "blob" })
+      .then((response) => {
+        // Cria um blob com os dados recebidos
+        const blob = new Blob([response.data], { type: "text/csv" });
+  
+        // Utiliza o FileSaver para salvar o arquivo
+        FileSaver.saveAs(blob, "bicicletas.csv");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   // Renderização do componente
   return (
     <AuthGuard>
@@ -153,6 +168,7 @@ export default function Bike() {
         ) : (
           <ContentContainer>
             {/* Botão para criar um novo usuário */}
+            <Button  label="gerar CSV" onClick={gerarCSV}/>
             <Button label="Criar Bicicleta" onClick={openCreateBikeModal} />
             {/* Mapeia a lista de usuários e renderiza os cartões de usuário */}
             {bikeList.map((bike) => {

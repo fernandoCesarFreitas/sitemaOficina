@@ -12,6 +12,7 @@ import { UserForm } from "./components/userForm";
 import { User } from "@/contexts/AuthContext";
 import Loading from "@/components/Loading";
 import { DeleteModal } from "./components/deleteForm";
+import FileSaver from "file-saver";
 
 // Estilos personalizados para os modais
 const customModalStyles = {
@@ -133,6 +134,23 @@ export default function Users() {
     );
   }, [closeDeleteUserModal, isModalDeleteUserOpen, user]);
 
+  //função para gerar csv
+  function gerarCSV() {
+    axios
+      .get("http://localhost:3000/usuarioscsv", { responseType: "blob" })
+      .then((response) => {
+        // Cria um blob com os dados recebidos
+        const blob = new Blob([response.data], { type: "text/csv" });
+  
+        // Utiliza o FileSaver para salvar o arquivo
+        FileSaver.saveAs(blob, "usuarios.csv");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
   // Renderização do componente
   return (
     <AuthGuard>
@@ -144,6 +162,10 @@ export default function Users() {
         ) : (
           <ContentContainer>
             {/* Botão para criar um novo usuário */}
+            <Button  label="gerar CSV" onClick={gerarCSV}/>
+             
+            
+            
             <Button label="Criar usuário" onClick={openCreateUserModal} />
             {/* Mapeia a lista de usuários e renderiza os cartões de usuário */}
             {userList.map((user) => {

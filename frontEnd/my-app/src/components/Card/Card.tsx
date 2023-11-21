@@ -5,12 +5,13 @@ import {
   DivContainer,
   IconButton,
 } from "./Card.styles";
-import { Pencil, Trash } from "phosphor-react";
+import { Pencil, Trash , FileCsv} from "phosphor-react";
 
 interface CardProps {
   children: ReactNode;
   openModalEdit: MouseEventHandler<HTMLButtonElement>;
   opemModalDelete: MouseEventHandler<HTMLButtonElement>;
+  
 }
 
 export function Card({ children, openModalEdit, opemModalDelete }: CardProps) {
@@ -29,6 +30,7 @@ export function Card({ children, openModalEdit, opemModalDelete }: CardProps) {
           >
             {<Trash size={24} />}
           </IconButton>
+         
         </ButtonsContainer>
       </ContentContainer>
     </DivContainer>

@@ -13,7 +13,7 @@ import { DeleteModal } from "./components/deleteForm";
 import { Bike } from "../bicicletas";
 import { Customer } from "../clientes";
 import { Item } from "../itens";
-import { format } from "date-fns";
+import FileSaver from "file-saver";
 import { ConcluidoModal } from "./components/concluidoForm";
 
 export type Order = {
@@ -180,6 +180,21 @@ export default function Os() {
     const ano = dataObj.getFullYear();
     return `${dia}/${mes}/${ano}`;
   };
+  function gerarCSV() {
+    axios
+      .get("http://localhost:3000/servicoscsv", { responseType: "blob" })
+      .then((response) => {
+        // Cria um blob com os dados recebidos
+        const blob = new Blob([response.data], { type: "text/csv" });
+  
+        // Utiliza o FileSaver para salvar o arquivo
+        FileSaver.saveAs(blob, "servicos.csv");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
 
   return (
     <AuthGuard>
@@ -190,6 +205,7 @@ export default function Os() {
           <Loading />
         ) : (
           <ContentContainer>
+            <Button  label="gerar CSV" onClick={gerarCSV}/>
             <Button label="Criar Serviço" onClick={openCreateOsModal} />
             {osList.map((os) => {
               return (

@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from "react";
 import { ButtonContainer } from "./styles";
 
 interface ButtonProps {
-  label: string;
+  label: string ;
   type?: "button" | "submit" | "reset" | undefined; //desta forma o type é opcional e pode ser undefined
   width?: number;
   height?: number;

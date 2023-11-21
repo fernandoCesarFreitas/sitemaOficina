@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface IconButtonProps {
-  variant: "primary" | "danger" | "secondary";
+  variant: "primary" | "danger" | "secondary" | "success";
 }
 
 export const DivContainer = styled.div`
