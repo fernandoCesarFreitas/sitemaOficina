@@ -1,3 +1,4 @@
+// OrderForm.js
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -12,31 +13,30 @@ import { Order } from "../..";
 import InputSelectItem from "../inputSelectItem";
 import InputSelectBike from "../inputSelectBike";
 
-// Definição das propriedades necessárias para o UserForm
+// Definição das propriedades necessárias para o OrderForm
 interface OrderModalProps {
   closeModal: Function; // Função para fechar o modal
-  orderData?: Order; // Dados do usuário, se existirem (para edição)
+  orderData?: Order; // Dados da ordem de serviço, se existirem (para edição)
 }
 
-// Esquema de validação para os dados do novo usuário
-const newUserValidationSchema = zod.object({
-  descricao: zod.string().min(1, "Informe um nome válido"),
+// Esquema de validação para os dados da ordem de serviço
+const orderValidationSchema = zod.object({
+  descricao: zod.string().min(1, "Informe uma descrição válida"),
   valor: zod.string().min(1, "Informe um valor válido"),
   observacoes: zod.string().nullable(),
-  bicicletaId: zod.string().min(1, "Informe um id válido"),
-  clienteId: zod.string().min(1, "Informe um id válido"),
-  itensUtilizadosId: zod.string(),
+  bicicletaId: zod.string().min(1, "Informe um ID de bicicleta válido"),
+  clienteId: zod.string().min(1, "Informe um ID de cliente válido"),
+  itensUtilizadosId: zod.string().min(1, "Informe um ID de item válido"),
 });
 
-// Tipo dos dados do usuário baseado no esquema de validação
-type OrderData = zod.infer<typeof newUserValidationSchema>;
+// Tipo dos dados da ordem de serviço baseado no esquema de validação
+type OrderData = zod.infer<typeof orderValidationSchema>;
 
-// Componente funcional UserForm
+// Componente funcional OrderForm
 export function OrderForm({ closeModal, orderData }: OrderModalProps) {
-  console.log(orderData);
   // Inicialização do useForm para gerenciar o formulário
   const methods = useForm<OrderData>({
-    resolver: zodResolver(newUserValidationSchema),
+    resolver: zodResolver(orderValidationSchema),
     defaultValues: {
       descricao: "",
       valor: "",
@@ -48,14 +48,13 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
   });
 
   // Desestruturação dos métodos e estado do formulário
-  const { handleSubmit, formState, setValue } = methods;
+  const { handleSubmit, formState, setValue, watch } = methods;
 
   // Desestruturação dos erros do formulário
   const { errors } = formState;
 
-  // Atualiza os campos do formulário se existirem dados do usuário
+  // Atualiza os campos do formulário se existirem dados da ordem de serviço
   useEffect(() => {
-    console.log(orderData);
     if (orderData) {
       setValue("descricao", orderData.descricao);
       setValue("valor", orderData.valor);
@@ -66,22 +65,21 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
     }
   }, [setValue, orderData]);
 
-  // Função para manipular a criação ou edição do usuário
-  async function handleCrateEditOrder(data: OrderData) {
+  // Função para manipular a criação ou edição da ordem de serviço
+  async function handleCreateEditOrder(data: OrderData) {
     try {
       if (orderData) {
-        // Se existirem dados do usuário, realiza a requisição PUT para edição
+        // Se existirem dados da ordem de serviço, realiza a requisição PUT para edição
         await axios.put(`http://localhost:3000/servicos/${orderData.id}`, data);
         toast.success("Ordem de serviço editada com sucesso");
       } else {
-        // Caso contrário, realiza a requisição POST para criação de um novo usuário
-        console.log(data);
+        // Caso contrário, realiza a requisição POST para criação de uma nova ordem de serviço
         await axios.post("http://localhost:3000/servicos", data);
         toast.success("Ordem de serviço criada com sucesso");
       }
       closeModal(); // Fecha o modal após o sucesso da requisição
     } catch (error) {
-      toast.error("Erro ao criar/editar Ordem de serviço");
+      toast.error("Erro ao criar/editar ordem de serviço");
     }
   }
 
@@ -89,7 +87,7 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
   return (
     <FormProvider {...methods}>
       <DivContainer>
-        <form onSubmit={handleSubmit(handleCrateEditOrder)}>
+        <form onSubmit={handleSubmit(handleCreateEditOrder)}>
           {/* Inputs do formulário com os respectivos erros */}
           <ItemsFormContainer>
             <Input
@@ -98,12 +96,6 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="descricao"
               error={errors.descricao?.message}
             />
-            {/* <Input
-              label="Data de saída"
-              name="dataSaida"
-              id="dataSaida"
-              error={errors.dataSaida?.message}
-            /> */}
             <Input
               label="Valor"
               name="valor"
@@ -118,30 +110,23 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               error={errors.observacoes?.message}
             />
             <InputSelectBike
-            label="Bicicleta"
-            id="bicicletaId"
-            bikeId={methods.watch("bicicletaId")}
-            onBikeChange={(bikeId) =>
-              methods.setValue("bicicletaId", bikeId)
-            }
+              label="Bicicleta"
+              id="bicicletaId"
+              bikeId={watch("bicicletaId")}
+              onBikeChange={(bikeId) => setValue("bicicletaId", bikeId)}
             />
             <InputSelectItem
               label="Item"
               id="itensUtilizadosId"
-              itemId={methods.watch("itensUtilizadosId")} 
-              onItemChange={(itemId) =>
-                methods.setValue("itensUtilizadosId", itemId)
-              }
+              itemId={watch("itensUtilizadosId")}
+              onItemChange={(itemId) => setValue("itensUtilizadosId", itemId)}
               error={errors.itensUtilizadosId?.message}
             />
-
             <InputSelect
               label="Cliente"
               id="clienteId"
-              clienteId={methods.watch("clienteId")} 
-              onClienteChange={(clienteId) =>
-                methods.setValue("clienteId", clienteId)
-              } 
+              clienteId={watch("clienteId")}
+              onClienteChange={(clienteId) => setValue("clienteId", clienteId)}
             />
           </ItemsFormContainer>
           <ButtonContainer>

@@ -1,24 +1,23 @@
-import { MouseEventHandler, ReactNode, useState } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import {
   ButtonsContainer,
   ContentContainer,
   DivContainer,
   IconButton,
 } from "./Card.styles";
-import { Pencil, Trash, Circle, CheckCircle } from "phosphor-react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { Pencil, Trash, Check } from "phosphor-react";
 import { Order } from "../..";
 
-// ... restante do código
-
+// Interface que define as propriedades esperadas pelo componente Card
 interface CardProps {
-  children: ReactNode;
-  openModalEdit: MouseEventHandler<HTMLButtonElement>;
-  openModalDelete: MouseEventHandler<HTMLButtonElement>;
-  opemModalConcluido: MouseEventHandler<HTMLButtonElement>;
-  orderData?: Order;
+  children: ReactNode; // Conteúdo interno do componente
+  openModalEdit: MouseEventHandler<HTMLButtonElement>; // Função para abrir o modal de edição
+  openModalDelete: MouseEventHandler<HTMLButtonElement>; // Função para abrir o modal de exclusão
+  opemModalConcluido: MouseEventHandler<HTMLButtonElement>; // Função para abrir o modal de conclusão
+  orderData?: Order; // Dados da ordem (opcional)
 }
+
+// Componente funcional Card que recebe as propriedades definidas pela interface CardProps
 export function Card({
   children,
   openModalEdit,
@@ -26,15 +25,16 @@ export function Card({
   opemModalConcluido,
   orderData,
 }: CardProps) {
-  console.log(orderData);
   return (
     <DivContainer>
       <ContentContainer>
-        {children}
+        {children} {/* Renderiza o conteúdo interno passado como propriedade */}
         <ButtonsContainer>
+          {/* Botão de edição */}
           <IconButton title="Editar" variant="primary" onClick={openModalEdit}>
             {<Pencil size={24} />}
           </IconButton>
+          {/* Botão de exclusão */}
           <IconButton
             title="Excluir"
             variant="danger"
@@ -42,21 +42,16 @@ export function Card({
           >
             {<Trash size={24} />}
           </IconButton>
+          {/* Botão de conclusão */}
           <IconButton
             title="Concluir"
             variant="primary"
             onClick={opemModalConcluido}
           >
-            {orderData && orderData.status === "Concluído" ? (
-              <CheckCircle size={36} color="yellow" />
-            ) : (
-              <Circle size={24} />
-            )}
+            <Check size={24} weight="bold" />
           </IconButton>
         </ButtonsContainer>
       </ContentContainer>
     </DivContainer>
   );
 }
-
-// ... restante do código

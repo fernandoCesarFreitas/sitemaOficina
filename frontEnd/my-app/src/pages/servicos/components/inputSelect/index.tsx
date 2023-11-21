@@ -4,31 +4,33 @@ import axios from 'axios';
 import { Customer } from '@/pages/clientes';
 import { StyledSelect } from './styles';
 
-
+// Definição das propriedades necessárias para o InputSelect
 interface InputSelectProps {
-  label: string;
-  id: string;
-  placeholder?: string;
-  width?: number;
-  error?: string;
-  // Adicione a propriedade clienteId
-  clienteId?: string;
-  // Adicione a função para lidar com a mudança do cliente
-  onClienteChange?: (clienteId: string) => void;
+  label: string; // Rótulo do campo de seleção
+  id: string; // ID único do campo de seleção
+  placeholder?: string; // Texto de placeholder opcional
+  width?: number; // Largura do campo de seleção
+  error?: string; // Mensagem de erro opcional
+  clienteId?: string; // ID do cliente selecionado (opcional)
+  onClienteChange?: (clienteId: string) => void; // Função para lidar com a mudança do cliente (opcional)
 }
 
+// Componente funcional InputSelect
 const InputSelect: React.FC<InputSelectProps> = ({
   label,
   id,
   placeholder,
   width,
   error,
-  clienteId, // Adicione clienteId à desestruturação
-  onClienteChange, // Adicione onClienteChange à desestruturação
+  clienteId,
+  onClienteChange,
 }) => {
+  // Estado para armazenar as opções disponíveis
   const [options, setOptions] = useState<Customer[]>([]);
+  // Estado para armazenar a opção selecionada
   const [selectedOption, setSelectedOption] = useState<string | null>(clienteId || '');
 
+  // Efeito para buscar os dados da API ao montar o componente
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +44,7 @@ const InputSelect: React.FC<InputSelectProps> = ({
     fetchData();
   }, []);
 
+  // Função para lidar com a mudança na seleção
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = e.target.value;
     setSelectedOption(selectedId);
@@ -51,13 +54,14 @@ const InputSelect: React.FC<InputSelectProps> = ({
     }
   };
 
+  // Renderização do componente
   return (
     <div>
       <label htmlFor={id}>{label}</label>
       <StyledSelect
         value={selectedOption || ''} 
         onChange={handleSelectChange}
-        width={300}
+        width={width || 300} // Utiliza a largura fornecida ou 300 como valor padrão
       >
         <option value="" disabled>
           Selecione uma opção

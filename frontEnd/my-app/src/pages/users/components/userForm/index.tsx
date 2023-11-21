@@ -1,3 +1,4 @@
+// UserForm.js
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -64,7 +65,7 @@ export function UserForm({ closeModal, userData }: UserModalProps) {
   }, [setValue, userData]);
 
   // Função para manipular a criação ou edição do usuário
-  async function handleCrateEditUser(data: UserData) {
+  async function handleCreateEditUser(data: UserData) {
     try {
       if (userData) {
         // Se existirem dados do usuário, realiza a requisição PUT para edição
@@ -85,7 +86,7 @@ export function UserForm({ closeModal, userData }: UserModalProps) {
   return (
     <FormProvider {...methods}>
       <DivContainer>
-        <form onSubmit={handleSubmit(handleCrateEditUser)}>
+        <form onSubmit={handleSubmit(handleCreateEditUser)}>
           <ItemsFormContainer>
             {/* Inputs do formulário com os respectivos erros */}
             <Input label="Nome" id="nome" error={errors.nome?.message} />

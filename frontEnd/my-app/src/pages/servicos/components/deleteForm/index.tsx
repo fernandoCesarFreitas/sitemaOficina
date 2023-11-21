@@ -4,21 +4,20 @@ import { ButtonContainer, DivContainer, ItemsFormContainer } from "./styles";
 import { Button } from "@/components/button";
 import { Order } from "../..";
 
-// Definição das propriedades necessárias para o UserForm
+// Definição das propriedades necessárias para o DeleteModal
 interface DeleteModalProps {
   closeModal: Function; // Função para fechar o modal
-  orderData?: Order; // Dados do usuário, se existirem (para edição)
+  orderData?: Order; // Dados da ordem de serviço, se existirem (para edição)
 }
 
-// Esquema de validação para os dados do novo usuário
-
-// Componente funcional UserForm
+// Componente funcional DeleteModal
 export function DeleteModal({ closeModal, orderData }: DeleteModalProps) {
 
+  // Função assíncrona para lidar com a exclusão da ordem de serviço
   async function handleDeleteOs() {
     try {
       if (orderData) {
-        // Se existirem dados do usuário, realiza a requisição PUT para edição
+        // Se existirem dados da ordem de serviço, realiza a requisição DELETE para exclusão
         await axios.delete(`http://localhost:3000/servicos/${orderData.id}`);
         toast.success("Ordem de serviço deletada com sucesso");
       }
@@ -31,10 +30,12 @@ export function DeleteModal({ closeModal, orderData }: DeleteModalProps) {
   // Renderização do formulário
   return (
     <DivContainer>
-      <span> Tem certeza que deseja excluir esta ordem de serviço?</span>
+      {/* Mensagem de confirmação */}
+      <span>Tem certeza que deseja excluir esta ordem de serviço?</span>
 
+      {/* Container para os botões */}
       <ButtonContainer>
-        {/* Botões de enviar e cancelar */}
+        {/* Botões de deletar e cancelar */}
         <Button label="Deletar" type="submit" onClick={handleDeleteOs} />
         <Button
           label="Cancelar"
