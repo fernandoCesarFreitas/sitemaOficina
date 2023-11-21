@@ -1,9 +1,11 @@
 import { NextFunction, Response, Request, Router } from "express";
 import { ServicosController } from "../controller/ServicosController";
+import { PDFController } from "../controller/PDFController";
 import { Servicos } from "../models/Servicos";
 import * as yup from 'yup';
 
 let controller: ServicosController = new ServicosController();
+let pdf: PDFController = new PDFController();
 
 async function validarPayload(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     let schema = yup.object({
@@ -48,6 +50,8 @@ let rotas: Router = Router();
 
 rotas.get("/servicos", controller.list);
 
+rotas.get("/servicosConcluidos", controller.listConcluidos);
+
 rotas.get("/servicos/:id", validar, controller.find);
 
 rotas.post("/servicos", validarPayload, controller.create);
@@ -55,5 +59,9 @@ rotas.post("/servicos", validarPayload, controller.create);
 rotas.put("/servicos/:id", validar, validarPayload, controller.update);
 
 rotas.delete("/servicos/:id", validar, controller.delete);
+
+rotas.delete("/servicosConcluidos/:id", validar, controller.concluido);
+
+rotas.get("/pdf", pdf.downloadPdf);
 
 export default rotas;

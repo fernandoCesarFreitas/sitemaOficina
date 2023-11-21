@@ -59,7 +59,9 @@ export class ServicosController {
   }
 
   async list(req: Request, res: Response): Promise<Response> {
-    let servicos: Servicos[] = await Servicos.find({ where: { status: "Ativo" }});
+    let servicos: Servicos[] = await Servicos.find({
+      where: { status: "Ativo" },
+    });
 
     return res.status(200).json(servicos);
   }
@@ -132,6 +134,24 @@ export class ServicosController {
     const dataAtual = new Date();
     const dataFormatada = format(dataAtual, "dd/MM/yyyy");
 
+    servico.status = "Inativo";
+
+    await servico.save();
+
+    return res.status(200).json(servico);
+  }
+
+  async concluido(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+
+    let servico: Servicos = res.locals.servicos;
+
+    if (!servico) {
+      return res.status(400).json({ mensagem: "Serviço não encontrado" });
+    }
+    const dataAtual = new Date();
+    const dataFormatada = format(dataAtual, "dd/MM/yyyy");
+
     servico.status = "Concluído";
 
     servico.dataSaida = dataFormatada;
@@ -149,6 +169,14 @@ export class ServicosController {
 
   async find(req: Request, res: Response): Promise<Response> {
     let servicos: Servicos = res.locals.servicos;
+    return res.status(200).json(servicos);
+  }
+
+  async listConcluidos(req: Request, res: Response): Promise<Response> {
+    let servicos: Servicos[] = await Servicos.find({
+      where: { status: "Concluído" },
+    });
+
     return res.status(200).json(servicos);
   }
 }

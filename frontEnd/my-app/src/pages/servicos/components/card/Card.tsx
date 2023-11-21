@@ -16,14 +16,14 @@ interface CardProps {
   children: ReactNode;
   openModalEdit: MouseEventHandler<HTMLButtonElement>;
   openModalDelete: MouseEventHandler<HTMLButtonElement>;
-  markAsConcluido: (orderData: Order | undefined) => void;
+  opemModalConcluido: MouseEventHandler<HTMLButtonElement>;
   orderData?: Order;
 }
 export function Card({
   children,
   openModalEdit,
   openModalDelete,
-  markAsConcluido,
+  opemModalConcluido,
   orderData,
 }: CardProps) {
   console.log(orderData);
@@ -45,7 +45,7 @@ export function Card({
           <IconButton
             title="Concluir"
             variant="primary"
-            onClick={() => markAsConcluido(orderData)}
+            onClick={opemModalConcluido}
           >
             {orderData && orderData.status === "Concluído" ? (
               <CheckCircle size={36} color="yellow" />

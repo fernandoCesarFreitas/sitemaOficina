@@ -27,6 +27,7 @@
     "nodemon": "^3.0.1",
     "pg": "^8.11.3",
     "prompt-sync": "^4.2.0",
+    "puppeteer": "^21.5.2",
     "reflect-metadata": "^0.1.13",
     "ts-md5": "^1.3.1",
     "tshash": "^1.7.0",

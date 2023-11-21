@@ -44,6 +44,7 @@ export class PDFController {
       <table border="1">`;
 
       let servicos: Servicos[] = await Servicos.find({
+        
         where: {
           dataEntrada: Between(dataEntrada, dataSaida),
           dataSaida: Between(dataEntrada, dataSaida)
@@ -65,7 +66,6 @@ export class PDFController {
         <td>${element.cliente}</td>
         <td>${element.valor}</td>
         <td>${element.bicicleta}</td>
-        <td>${element.tipoServico}</td>
         <td>${element.itensUtilizados}</td>
         <td>${element.dataEntrada}</td>
         <td>${element.dataSaida}</td>
@@ -118,7 +118,6 @@ export class PDFController {
       financeiros.forEach((element) => {
         html += `<tr><td>${element.id}</td>
         <td>${element.status}</td>
-        <td>${element.metodoDePagamento}</td>
         <td>${element.servicosRealizados}</td></tr>\r`;
       });
       html += "</table>";
@@ -140,7 +139,8 @@ export class PDFController {
     res.append("Content-Type", "application/x-pdf");
     res.append("Content-Disposition", 'attachment; filename="output.pdf"');
     res.send(pdfBuffer);
-    return res.status(200).json({ mensagem: "Pdf enviado" })
+    return res.status(200).json({ mensagem: "Pdf enviado" });
+  
   }
 
   static async pdf(html: string) {

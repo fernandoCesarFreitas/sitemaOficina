@@ -14,6 +14,7 @@ import { Bike } from "../bicicletas";
 import { Customer } from "../clientes";
 import { Item } from "../itens";
 import { format } from "date-fns";
+import { ConcluidoModal } from "./components/concluidoForm";
 
 export type Order = {
   id: number;
@@ -158,15 +159,20 @@ export default function Os() {
     );
   }, [closeDeleteOsModal, isModalDeleteOsOpen, os]);
 
-  const handleConcluidoClick = async (order: Order) => {
-    console.log(order);
-    try {
-      await axios.delete(`http://localhost:3000/servicos/${order.id}`);
-      await fetchOrder(); // Atualiza a lista após a conclusão
-    } catch (error) {
-      console.error("Erro ao marcar como concluído:", error);
-    }
-  };
+  const concluidoOsModal = useMemo(() => {
+    return (
+      <ModalContainer
+        isOpen={isModalConcluidoOsOpen}
+        onRequestClose={closeDeleteOsModal}
+        contentLabel="Modal de conclusao de Serviços"
+        style={customModalStyles as Styles}
+      >
+        <h1>Concluir Ordem de Serviço</h1>
+        <ConcluidoModal closeModal={closeConcluidoOsModal} orderData={os} />
+      </ModalContainer>
+    );
+  }, [closeConcluidoOsModal, closeDeleteOsModal, isModalConcluidoOsOpen, os]);
+
   const formatarData = (data: string) => {
     const dataObj = new Date(data);
     const dia = dataObj.getDate().toString().padStart(2, "0");
@@ -191,7 +197,7 @@ export default function Os() {
                   key={os.id}
                   openModalEdit={() => openEditOsModal(os)}
                   openModalDelete={() => openDeleteOsModal(os)}
-                  markAsConcluido={() => openConcluidoOsModal(os)}
+                  opemModalConcluido={() => openConcluidoOsModal(os)}
                   orderData={os}
                 >
                   <CardInfo title="ID" data={os.id} />
@@ -210,6 +216,7 @@ export default function Os() {
       {createOsModal}
       {editOsModal}
       {deleteOsModal}
+      {concluidoOsModal}
     </AuthGuard>
   );
 }

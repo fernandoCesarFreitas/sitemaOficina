@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alien, Atom, GearSix, User, Bicycle, Person , Spiral, Wrench, Money, ClipboardText, Package} from "phosphor-react";
+import { Checks, Atom, GearSix, User, Bicycle, Person , Spiral, Wrench, Money, ClipboardText, Package} from "phosphor-react";
 import {
   MenuContainer,
   ContentContainer,
@@ -51,6 +51,9 @@ export function Menu() {
           </NavLink>
           <NavLink href="/financeiro">
             <ClipboardText size={32} alt="Relatórios" />{/*relatorios*/}
+          </NavLink>
+          <NavLink href="/servicosConcluidos">
+            <Checks size={32} />
           </NavLink>
         </NavLinkContainer>
       </ContentContainer>

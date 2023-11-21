@@ -21,6 +21,9 @@ export class Financeiro extends BaseEntity {
   @Column("decimal", { precision: 10, scale: 2 })
   valor: number;
 
+  @Column({nullable: true})
+  modoPagamento: string;
+
   @OneToMany(() => Servicos, servico => servico.financeiro)
   servicosRealizados: Servicos;
 
