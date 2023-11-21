@@ -21,7 +21,6 @@ interface OrderModalProps {
 // Esquema de validação para os dados do novo usuário
 const newUserValidationSchema = zod.object({
   descricao: zod.string().min(1, "Informe um nome válido"),
-  dataSaida: zod.string().nullable(),
   valor: zod.string().min(1, "Informe um valor válido"),
   observacoes: zod.string().nullable(),
   bicicletaId: zod.string().min(1, "Informe um id válido"),
@@ -40,7 +39,6 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
     resolver: zodResolver(newUserValidationSchema),
     defaultValues: {
       descricao: "",
-      dataSaida: "",
       valor: "",
       observacoes: "",
       bicicletaId: "",
@@ -60,7 +58,6 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
     console.log(orderData);
     if (orderData) {
       setValue("descricao", orderData.descricao);
-      setValue("dataSaida", orderData.dataSaida);
       setValue("valor", orderData.valor);
       setValue("observacoes", orderData.observacoes);
       setValue("bicicletaId", orderData.bicicleta.id.toString());
@@ -101,12 +98,12 @@ export function OrderForm({ closeModal, orderData }: OrderModalProps) {
               id="descricao"
               error={errors.descricao?.message}
             />
-            <Input
+            {/* <Input
               label="Data de saída"
               name="dataSaida"
               id="dataSaida"
               error={errors.dataSaida?.message}
-            />
+            /> */}
             <Input
               label="Valor"
               name="valor"

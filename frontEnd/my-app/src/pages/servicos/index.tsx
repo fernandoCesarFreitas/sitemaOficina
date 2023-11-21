@@ -13,7 +13,7 @@ import { DeleteModal } from "./components/deleteForm";
 import { Bike } from "../bicicletas";
 import { Customer } from "../clientes";
 import { Item } from "../itens";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 export type Order = {
   id: number;
@@ -167,10 +167,10 @@ export default function Os() {
       console.error("Erro ao marcar como concluído:", error);
     }
   };
-  const formatarData = (data : string) => {
+  const formatarData = (data: string) => {
     const dataObj = new Date(data);
-    const dia = dataObj.getDate().toString().padStart(2, '0');
-    const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+    const dia = dataObj.getDate().toString().padStart(2, "0");
+    const mes = (dataObj.getMonth() + 1).toString().padStart(2, "0");
     const ano = dataObj.getFullYear();
     return `${dia}/${mes}/${ano}`;
   };
@@ -195,7 +195,10 @@ export default function Os() {
                   orderData={os}
                 >
                   <CardInfo title="ID" data={os.id} />
-                  <CardInfo title="Entrada" data={formatarData(os.dataEntrada)} />
+                  <CardInfo
+                    title="Entrada"
+                    data={formatarData(os.dataEntrada)}
+                  />
                   <CardInfo title="Saída" data={os.dataSaida} />
                   <CardInfo title="Cliente" data={os.cliente.nome} />
                 </Card>
