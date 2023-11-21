@@ -64,4 +64,6 @@ rotas.delete("/servicosConcluidos/:id", validar, controller.concluido);
 
 rotas.get("/pdf", pdf.downloadPdf);
 
+rotas.get("/servicoscsv", controller.gerarCSVServicos);
+
 export default rotas;

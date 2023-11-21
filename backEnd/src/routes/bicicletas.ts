@@ -51,4 +51,6 @@ rotas.put("/bicicletas/:id", validar, validarPayload, controller.update);
 
 rotas.delete("/bicicletas/:id", validar, controller.delete);
 
+rotas.get("/bicicletascsv", controller.gerarCSVBikes);
+
 export default rotas;

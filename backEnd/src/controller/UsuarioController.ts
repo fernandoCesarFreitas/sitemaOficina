@@ -55,20 +55,30 @@ export class UsuarioController {
     return res.status(200).json(usuario);
   }
 
-  async csv(req: Request, res: Response): Promise<Response> {
-    let nome = req.query.nome;
+  async gerarCSVUsuarios(req: Request, res: Response): Promise<void> {
+    try {
+      const usuarios: Usuario[] = await Usuario.find(); // Substitua pelo método de busca apropriado
 
-    let users: Usuario[] = await Usuario.findBy({}); //aqui na lista nao usamos as {}
-    console.log(users)
-    let header = '"Nome";"Email"\n';
-    let csv = header;
+      if (usuarios.length === 0) {
+        res.status(404).json({ mensagem: "Nenhum Usuário encontrado." });
+      }
 
-    for (let idx in users) {
-      let pessoa = users[idx];
-      csv +=
-        '"' + pessoa.nome + '";"' + pessoa.email + '"\n';
+      let csv = '"ID";"Nome";"Email";"status"\n';
+
+      for (const usuario of usuarios) {
+        csv += `"${usuario.id}";"${usuario.nome}";"${usuario.email}";"${usuario.status}"\n`;
+      }
+
+      // Envie o arquivo CSV como resposta
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", "attachment; filename=usuarios.csv");
+      res.status(200).send(csv);
+    } catch (error) {
+      console.error("Erro ao gerar o arquivo CSV de Usuarios:", error);
+      res
+        .status(500)
+        .json({ mensagem: "Erro ao gerar o arquivo CSV de Usuarios." });
     }
-    console.log(csv)
-    return res.status(200).send(csv).attachment('output.csv');
   }
 }
+

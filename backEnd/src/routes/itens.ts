@@ -52,4 +52,6 @@ rotas.put("/itens/:id", validar, validarPayload, controller.update);
 
 rotas.delete("/itens/:id", validar, controller.delete);
 
+rotas.get("/itenscsv", controller.gerarCSVItens);
+
 export default rotas;

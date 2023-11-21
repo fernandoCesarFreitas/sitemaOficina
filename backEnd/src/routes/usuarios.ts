@@ -85,6 +85,6 @@ rotas.put(
 //delete
 rotas.delete("/usuarios/:id", validar, usuarioController.delete);
 
-rotas.get("usuarios/csv",usuarioController.csv);
+rotas.get("/usuarioscsv",usuarioController.gerarCSVUsuarios);
 
 export default rotas;

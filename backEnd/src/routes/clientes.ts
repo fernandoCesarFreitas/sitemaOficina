@@ -54,4 +54,5 @@ rotas.put("/clientes/:id", validar, validarPayload, controller.update);
 
 rotas.delete("/clientes/:id", validar, controller.delete);
 
+rotas.get("/clientescsv", controller.gerarCSVClientes);
 export default rotas;

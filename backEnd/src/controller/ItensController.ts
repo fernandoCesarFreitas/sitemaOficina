@@ -68,4 +68,34 @@ export class ItensController {
         let itens: Itens = res.locals.itens;
         return res.status(200).json(itens);
     }
+
+    async gerarCSVItens(req: Request, res: Response): Promise<void> {
+        try {
+          const itens: Itens[] = await Itens.find(); // Substitua pelo método de busca apropriado
+    
+          if (itens.length === 0) {
+            res.status(404).json({ mensagem: "Nenhum Item encontrado." });
+          }
+    
+          let csv =
+            '"ID";"Nome";"Marca";"Valor";"Quantidade";"Status"\n';
+    
+          for (const item of itens) {
+            csv += `"${item.id}";"${item.nome}";"${item.marca}";"${item.valor}";"${item.quantidade}";"${item.status}"\n`;
+          }
+    
+          // Envie o arquivo CSV como resposta
+          res.setHeader("Content-Type", "text/csv");
+          res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=itens.csv"
+          );
+          res.status(200).send(csv);
+        } catch (error) {
+          console.error("Erro ao gerar o arquivo CSV de itens:", error);
+          res
+            .status(500)
+            .json({ mensagem: "Erro ao gerar o arquivo CSV de itens." });
+        }
+      }
 }

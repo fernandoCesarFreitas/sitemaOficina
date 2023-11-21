@@ -72,4 +72,30 @@ export class BicicletaController {
         let bicicleta: Bicicleta = res.locals.bicicleta;
         return res.status(200).json(bicicleta);
     }
+
+    async gerarCSVBikes(req: Request, res: Response): Promise<void> {
+        try {
+          const bicicletas: Bicicleta[] = await Bicicleta.find(); // Substitua pelo método de busca apropriado
+    
+          if (bicicletas.length === 0) {
+            res.status(404).json({ mensagem: "Nenhum Bicicleta encontrada." });
+          }
+    
+          let csv = '"ID";"Modelo";"Cor";"Tipo";"status"\n';
+    
+          for (const bicicleta of bicicletas) {
+            csv += `"${bicicleta.id}";"${bicicleta.modelo}";"${bicicleta.cor}";"${bicicleta.tipo}";"${bicicleta.status}"\n`;
+          }
+    
+          // Envie o arquivo CSV como resposta
+          res.setHeader("Content-Type", "text/csv");
+          res.setHeader("Content-Disposition", "attachment; filename=bicicletas.csv");
+          res.status(200).send(csv);
+        } catch (error) {
+          console.error("Erro ao gerar o arquivo CSV de Bicicletas:", error);
+          res
+            .status(500)
+            .json({ mensagem: "Erro ao gerar o arquivo CSV de Bicicletas." });
+        }
+      }
 }

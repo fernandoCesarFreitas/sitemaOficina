@@ -179,4 +179,30 @@ export class ServicosController {
 
     return res.status(200).json(servicos);
   }
+
+  async gerarCSVServicos(req: Request, res: Response): Promise<void> {
+    try {
+      const servicos: Servicos[] = await Servicos.find(); // Substitua pelo método de busca apropriado
+
+      if (servicos.length === 0) {
+        res.status(404).json({ mensagem: "Nenhum Serviço encontrado." });
+      }
+
+      let csv = '"ID";"Modelo";"Cor";"Tipo";"status"\n';
+
+      for (const servico of servicos) {
+        csv += `"${servico.id}";"${servico.descricao}";"${servico.bicicleta.modelo}";"${servico.cliente.nome}";"${servico.itensUtilizados.nome}";"${servico.status}"\n`;
+      }
+
+      // Envie o arquivo CSV como resposta
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", "attachment; filename=servicos.csv");
+      res.status(200).send(csv);
+    } catch (error) {
+      console.error("Erro ao gerar o arquivo CSV de Serviços:", error);
+      res
+        .status(500)
+        .json({ mensagem: "Erro ao gerar o arquivo CSV de Serviços." });
+    }
+  }
 }
